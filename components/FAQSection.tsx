@@ -48,7 +48,7 @@ export const FAQSection = () => {
     }
 
     return (
-        <section id="faq" className="py-16 md:py-20 bg-gray-50 dark:bg-black transition-colors duration-300">
+        <section id="faq" className="py-16 md:py-20 section-light transition-colors duration-300">
             <div className="container mx-auto px-4 md:px-6 max-w-4xl">
                 <motion.div
                     ref={ref}
@@ -57,10 +57,10 @@ export const FAQSection = () => {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-12 md:mb-16"
                 >
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
-                        Frequently Asked Questions<span className="text-red-400">.</span>
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-professional mb-4 md:mb-6">
+                        Frequently Asked Questions<span className="text-purple-primary">.</span>
                     </h2>
-                    <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
+                    <p className="text-lg md:text-xl text-muted-professional">
                         Everything you need to know about our services and process.
                     </p>
                 </motion.div>
@@ -73,8 +73,8 @@ export const FAQSection = () => {
                             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                             className={`rounded-2xl overflow-hidden transition-all duration-300 ${openIndex === index
-                                ? "bg-white dark:bg-gray-900/50 border border-red-400/50"
-                                : "bg-white dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700"
+                                ? "card-professional border border-purple-primary/50"
+                                : "card-professional hover:border-purple-primary"
                                 }`}
                         >
                             <button
@@ -82,7 +82,7 @@ export const FAQSection = () => {
                                 className="w-full px-6 md:px-8 py-6 md:py-8 text-left flex items-center justify-between transition-colors"
                             >
                                 <span
-                                    className={`text-base md:text-lg font-semibold ${openIndex === index ? "text-red-400" : "text-gray-900 dark:text-white"
+                                    className={`text-base md:text-lg font-semibold ${openIndex === index ? "text-purple-primary" : "text-professional"
                                         }`}
                                 >
                                     {String(index).padStart(2, "0")}. {faq.question}
@@ -90,7 +90,7 @@ export const FAQSection = () => {
 
                                 <motion.div animate={{ rotate: openIndex === index ? 180 : 0 }} transition={{ duration: 0.3 }}>
                                     <ChevronDown
-                                        className={`w-5 h-5 md:w-6 md:h-6 ${openIndex === index ? "text-red-400" : "text-gray-400 dark:text-gray-400"}`}
+                                        className={`w-5 h-5 md:w-6 md:h-6 ${openIndex === index ? "text-purple-primary" : "text-muted-professional"}`}
                                     />
                                 </motion.div>
                             </button>
@@ -105,7 +105,7 @@ export const FAQSection = () => {
                                 className="overflow-hidden"
                             >
                                 <div className="px-6 md:px-8 pb-6 md:pb-8">
-                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{faq.answer}</p>
+                                    <p className="text-muted-professional leading-relaxed">{faq.answer}</p>
                                 </div>
                             </motion.div>
                         </motion.div>

@@ -22,7 +22,7 @@ export const HeroSection = () => {
             className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300"
         >
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center justify-center mt-20">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -30,16 +30,17 @@ export const HeroSection = () => {
                         className="space-y-6 md:space-y-8"
                     >
                         <motion.h1
-                            className="text-5xl md:text-6xl lg:text-8xl font-bold text-professional leading-tight"
+                            className="flex lg:flex-col sm:mt-20 lg:mt-10 text-5xl md:text-6xl lg:text-8xl font-bold text-professional leading-tight"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
-                            Create<span className="text-purple-primary">.</span>
+                            <div>Create<span className="text-purple-primary">.</span></div>
                             <br />
-                            Design<span className="text-purple-primary">.</span>
+                            <div>Design<span className="text-purple-primary">.</span></div>
                             <br />
-                            Build<span className="text-purple-primary">.</span>
+                            <div>Build<span className="text-purple-primary">.</span></div>
+
                         </motion.h1>
 
                         <motion.p

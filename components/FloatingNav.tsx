@@ -75,16 +75,16 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                     className,
                 )}
             >
-                <div className="flex items-center md:justify-between justify-between relative z-10">
+                <div className="flex items-center justify-between relative z-10">
                     {/* Logo */}
-                    <div className="flex items-center mr-4">
+                    <div className="items-center mr-4 hidden md:block">
                         <span className="hidden md:block text-foreground/90 font-bold ml-2 text-2xl drop-shadow-sm">
                             Graphics Garage<span className="text-purple-primary">.</span>
                         </span>
                     </div>
 
                     {/* Navigation Items */}
-                    <div className="flex gap-6">
+                    <div className="flex justify-between items-center w-full md:w-fit gap-8">
                         <div className="flex items-center space-x-1">
                             {navItems.map((navItem, idx) => (
                                 <button
@@ -102,7 +102,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                                     {activeSection === navItem.link.slice(1) && (
                                         <motion.div
                                             layoutId="activeSection"
-                                            className="absolute inset-0 bg-purple-primary/90  backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-primary/30"
+                                            className="absolute inset-0 bg-purple-primary/90  backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-primary/30 -z-10"
                                             initial={false}
                                             transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                         />

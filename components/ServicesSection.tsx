@@ -1,0 +1,187 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { useInView } from "framer-motion"
+import { useRef } from "react"
+import { Palette, Code, TrendingUp, Smartphone, Globe } from "lucide-react"
+
+const services = [
+    {
+        title: "Figma Design",
+        description: "We create stunning designs for your website and mobile applications using Figma.",
+        icon: Palette,
+        stats: { number: "150+", label: "Projects", secondary: "10k+", secondaryLabel: "Downloads" },
+        illustration: (
+            <div className="relative w-20 h-16">
+                <div className="absolute top-2 right-0 w-12 h-8 bg-red-400/80 rounded-lg transform rotate-3"></div>
+                <div className="absolute top-4 right-2 w-8 h-6 bg-red-300/60 rounded-md transform -rotate-6"></div>
+                <div className="absolute bottom-0 left-0 w-3 h-3 bg-red-500 rounded-full"></div>
+            </div>
+        ),
+    },
+    {
+        title: "Illustration",
+        description: "We create stunning illustrations for your website and mobile applications.",
+        icon: Code,
+        stats: { number: "50+", label: "Illustrations" },
+        illustration: (
+            <div className="relative w-20 h-16">
+                <div className="absolute top-1 right-2 w-10 h-10 bg-gray-600 rounded-lg"></div>
+                <div className="absolute top-3 right-4 w-6 h-6 bg-red-400 rounded-full"></div>
+                <div className="absolute bottom-2 right-0 w-4 h-4 bg-red-300 rounded transform rotate-45"></div>
+            </div>
+        ),
+    },
+    {
+        title: "Inspiration",
+        description: "We provide inspiration for your website and mobile applications.",
+        icon: TrendingUp,
+        stats: { number: "25+", label: "Clients" },
+        illustration: (
+            <div className="relative w-20 h-16">
+                <div className="absolute top-0 right-0 w-8 h-6 bg-gray-500 rounded-md"></div>
+                <div className="absolute top-2 right-2 w-4 h-4 bg-red-400 rounded-full"></div>
+                <div className="absolute bottom-0 right-4 w-12 h-8 bg-gray-600 rounded-lg"></div>
+                <div className="absolute bottom-2 right-6 w-3 h-3 bg-red-300 rounded-full"></div>
+            </div>
+        ),
+    },
+    {
+        title: "Mobile",
+        description: "We create modern and responsive applications for your website and mobile applications.",
+        icon: Smartphone,
+        stats: { number: "100+", label: "Apps" },
+        illustration: (
+            <div className="relative w-20 h-16">
+                <div className="absolute top-0 right-2 w-8 h-12 bg-gray-600 rounded-lg"></div>
+                <div className="absolute top-2 right-3 w-6 h-8 bg-gray-800 rounded-md"></div>
+                <div className="absolute bottom-2 left-0 w-6 h-6 bg-red-400 rounded transform rotate-12"></div>
+            </div>
+        ),
+    },
+    {
+        title: "Mobile Development",
+        description: "Cross-platform mobile solutions that deliver exceptional user experiences.",
+        icon: Globe,
+        stats: { number: "100+", label: "Apps" },
+        illustration: (
+            <div className="relative w-20 h-16">
+                <div className="absolute top-1 right-1 w-10 h-10 bg-gray-600 rounded-lg"></div>
+                <div className="absolute top-3 right-3 w-6 h-6 bg-red-400 rounded-full"></div>
+                <div className="absolute bottom-1 right-5 w-4 h-4 bg-red-300 rounded transform rotate-45"></div>
+            </div>
+        ),
+    },
+]
+
+export const ServicesSection = () => {
+    const ref = useRef(null)
+    const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+    return (
+        <section id="services" className="py-12 md:py-20 bg-gray-50 dark:bg-black transition-colors duration-300">
+            <div className="container mx-auto px-4 md:px-6">
+                <motion.div
+                    ref={ref}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-12 md:mb-16"
+                >
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6">
+                        Our Expertise<span className="text-red-400">.</span>
+                    </h2>
+                    <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-4xl mx-auto px-4">
+                        We combine strategic thinking with cutting-edge technology to deliver solutions that set you apart from the
+                        competition.
+                    </p>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8 mb-12">
+                    {/* Figma Design - spans 2 columns */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                        transition={{ duration: 0.6, delay: 0 * 0.1 }}
+                        className="group h-full md:col-span-2 lg:col-span-2"
+                    >
+                        <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 md:p-8 h-full hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="flex-1">
+                                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                                        {services[0].title}
+                                    </h3>
+                                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                                        {services[0].description}
+                                    </p>
+                                </div>
+                                <div className="ml-4">{services[0].illustration}</div>
+                            </div>
+                            <div className="flex items-baseline space-x-6">
+                                <div>
+                                    <div className="text-2xl md:text-3xl font-bold text-red-400">{services[0].stats.number}</div>
+                                    <div className="text-xs md:text-sm text-gray-500 dark:text-gray-500">{services[0].stats.label}</div>
+                                </div>
+                                {services[0].stats.secondary && (
+                                    <div>
+                                        <div className="text-2xl md:text-3xl font-bold text-red-400">{services[0].stats.secondary}</div>
+                                        <div className="text-xs md:text-sm text-gray-500 dark:text-gray-500">
+                                            {services[0].stats.secondaryLabel}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Other services */}
+                    {services.slice(1).map((service, index) => (
+                        <motion.div
+                            key={service.title}
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                            transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
+                            className="group h-full md:col-span-1 lg:col-span-2"
+                        >
+                            <div className="bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 md:p-8 h-full hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300">
+                                <div className="flex items-start justify-between mb-6">
+                                    <div className="flex-1">
+                                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                                            {service.title}
+                                        </h3>
+                                        <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                                            {service.description}
+                                        </p>
+                                    </div>
+                                    <div className="ml-4">{service.illustration}</div>
+                                </div>
+                                <div className="flex items-baseline space-x-6">
+                                    <div>
+                                        <div className="text-2xl md:text-3xl font-bold text-red-400">{service.stats.number}</div>
+                                        <div className="text-xs md:text-sm text-gray-500 dark:text-gray-500">{service.stats.label}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+
+                    {/* Contact us - spans remaining space */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="md:col-span-4 lg:col-span-2 flex items-center justify-center"
+                    >
+                        <div className="inline-flex items-center space-x-4 text-gray-900 dark:text-white cursor-pointer hover:text-red-400 transition-colors duration-300 group">
+                            <span className="font-semibold text-2xl md:text-3xl">Contact us</span>
+                            <div className="flex items-center">
+                                <div className="w-12 h-0.5 bg-red-400 rounded-full"></div>
+                                <div className="w-0 h-0 border-l-8 border-l-red-400 border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1"></div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+        </section>
+    )
+}

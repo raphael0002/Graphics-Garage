@@ -3,6 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "Attena";
+  src: url("/fonts/Attena.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -55,6 +63,10 @@
 
 :root {
   --radius: 0.625rem;
+
+  /* fonts */
+  --font-attena: "Attena", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
 
   /* Custom Palette Colors - Exact from image */
   --purple-primary: #8d69bf; /* Main purple accent */
@@ -148,6 +160,36 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Apply Attena to headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span {
+  font-family: var(--font-attena);
+}
+
+/* Apply Poppins to body and other elements */
+body,
+p,
+a,
+div,
+button,
+input,
+textarea,
+label {
+  font-family: var(--font-poppins);
+}
+
+/* Optional: Ensure consistent font rendering */
+html {
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom utility classes for our exact palette */

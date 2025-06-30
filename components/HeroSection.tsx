@@ -30,16 +30,16 @@ export const HeroSection = () => {
                         className="space-y-6 md:space-y-8"
                     >
                         <motion.h1
-                            className="flex lg:flex-col sm:mt-20 lg:mt-10 text-5xl md:text-6xl lg:text-8xl font-bold text-professional leading-tight"
+                            className="flex lg:flex-col sm:mt-20 lg:mt-10 gap-2 md:gap-2 text-5xl md:text-6xl lg:text-8xl font-bold text-professional leading-tight md:leading-none "
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
-                            <div>Create<span className="text-purple-primary">.</span></div>
+                            <span className="dark:text-purple-50 text-purple-primary ">CREATE </span>
                             <br />
-                            <div>Design<span className="text-purple-primary">.</span></div>
+                            <span className="dark:text-purple-50 text-purple-primary ">DESIGN </span>
                             <br />
-                            <div>Build<span className="text-purple-primary">.</span></div>
+                            <span className="dark:text-purple-50 text-purple-primary ">BUILD </span>
 
                         </motion.h1>
 
@@ -309,7 +309,7 @@ export const HeroSection = () => {
                     </motion.div>
                 </div>
 
-                <motion.div
+                {/* <motion.div
                     className="mt-16 md:mt-20"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -330,7 +330,7 @@ export const HeroSection = () => {
                             <span className="text-muted-professional text-sm">MarketPro</span>
                         </div>
                     </div>
-                </motion.div>
+                </motion.div> */}
             </div>
         </section>
     )

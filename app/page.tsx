@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { FloatingNav } from "@/components/FloatingNav";
+// import { FloatingNav } from "@/components/FloatingNav";
 
 // Lazy load components for better performance
 const HeroSection = lazy(() => import("@/components/HeroSection").then(module => ({ default: module.HeroSection })));
@@ -18,7 +18,7 @@ const LoadingSpinner = () => (
 export default function Home() {
   return (
     <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-300">
-      <FloatingNav />
+      {/* <FloatingNav /> */}
       <Suspense fallback={<LoadingSpinner />}>
         <HeroSection />
       </Suspense>

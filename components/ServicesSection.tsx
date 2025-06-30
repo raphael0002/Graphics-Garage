@@ -1,94 +1,22 @@
-"use client";
+"use client"
 
-import { motion, useInView } from "framer-motion";
-import { JSX, useRef } from "react";
-import { Megaphone, PenTool, Sparkles, Globe, Layout } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-
-interface Service {
-    title: string;
-    description: string;
-    icon: LucideIcon;
-    stats: {
-        number: string;
-        label: string;
-        secondary?: string;
-        secondaryLabel?: string;
-    };
-    illustration: JSX.Element;
-}
-
-const services: Service[] = [
-    {
-        title: "Social Media Marketing",
-        description: "Boost your brand’s presence with targeted social media campaigns that drive engagement and growth.",
-        icon: Megaphone,
-        stats: { number: "200+", label: "Campaigns", secondary: "1M+", secondaryLabel: "Impressions" },
-        illustration: (
-            <div className="relative w-20 h-16">
-                <div className="absolute top-2 right-0 w-12 h-8 bg-purple-primary/80 rounded-lg transform rotate-3"></div>
-                <div className="absolute top-4 right-2 w-8 h-6 bg-purple-primary/60 rounded-md transform -rotate-6"></div>
-                <div className="absolute bottom-0 left-0 w-3 h-3 bg-purple-dark rounded-full"></div>
-            </div>
-        ),
-    },
-    {
-        title: "Graphic Design",
-        description: "Create stunning visuals for digital and print media, from logos to marketing collateral.",
-        icon: PenTool,
-        stats: { number: "300+", label: "Designs" },
-        illustration: (
-            <div className="relative w-20 h-16">
-                <div className="absolute top-1 right-2 w-10 h-10 bg-gray-dark rounded-lg"></div>
-                <div className="absolute top-3 right-4 w-6 h-6 bg-purple-primary rounded-full"></div>
-                <div className="absolute bottom-2 right-0 w-4 h-4 bg-purple-dark rounded transform rotate-45"></div>
-            </div>
-        ),
-    },
-    {
-        title: "Branding",
-        description: "Develop a cohesive brand identity that resonates with your audience and stands out.",
-        icon: Sparkles,
-        stats: { number: "80+", label: "Brand Identities" },
-        illustration: (
-            <div className="relative w-20 h-16">
-                <div className="absolute top-0 right-2 w-8 h-12 bg-gray-dark rounded-lg"></div>
-                <div className="absolute top-2 right-3 w-6 h-8 bg-navy-dark rounded-md"></div>
-                <div className="absolute bottom-2 left-0 w-6 h-6 bg-purple-primary rounded transform rotate-12"></div>
-            </div>
-        ),
-    },
-    {
-        title: "Web Development",
-        description: "Build fast, responsive, and SEO-optimized websites tailored to your business needs.",
-        icon: Globe,
-        stats: { number: "120+", label: "Websites" },
-        illustration: (
-            <div className="relative w-20 h-16">
-                <div className="absolute top-0 right-2 w-8 h-12 bg-gray-dark rounded-lg"></div>
-                <div className="absolute top-2 right-3 w-6 h-8 bg-navy-dark rounded-md"></div>
-                <div className="absolute bottom-2 left-0 w-6 h-6 bg-purple-primary rounded transform rotate-12"></div>
-            </div>
-        ),
-    },
-    {
-        title: "UI/UX Design",
-        description: "Design intuitive and user-friendly interfaces for web and mobile applications.",
-        icon: Layout,
-        stats: { number: "150+", label: "Projects" },
-        illustration: (
-            <div className="relative w-20 h-16">
-                <div className="absolute top-1 right-1 w-10 h-10 bg-gray-dark rounded-lg"></div>
-                <div className="absolute top-3 right-3 w-6 h-6 bg-purple-primary rounded-full"></div>
-                <div className="absolute bottom-1 right-5 w-4 h-4 bg-purple-dark rounded transform rotate-45"></div>
-            </div>
-        ),
-    },
-];
+import { motion, useInView } from "framer-motion"
+import { useRef } from "react"
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { servicesData } from "@/data/services"
+import { Icon } from "@/components/ui/icon"
 
 export const ServicesSection = () => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const ref = useRef(null)
+    const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+    const scrollToContact = () => {
+        const element = document.getElementById("contact")
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" })
+        }
+    }
 
     return (
         <section id="services" className="py-12 md:py-20 section-light transition-colors duration-300">
@@ -100,8 +28,17 @@ export const ServicesSection = () => {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-12 md:mb-16"
                 >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="inline-flex items-center px-4 py-2 bg-purple-primary/10 border border-purple-primary/20 rounded-full text-purple-primary text-sm font-medium backdrop-blur-sm mb-6"
+                    >
+                        Our Expertise
+                    </motion.div>
+
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-professional mb-4 md:mb-6">
-                        Our Expertise<span className="text-purple-primary">.</span>
+                        Services That Drive Success<span className="text-purple-primary">.</span>
                     </h2>
                     <p className="text-lg md:text-xl text-muted-professional max-w-4xl mx-auto px-4">
                         We combine strategic thinking with cutting-edge technology to deliver solutions that set you apart from the
@@ -109,89 +46,85 @@ export const ServicesSection = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8 mb-12">
-                    {/* Social Media Marketing - spans 2 columns */}
-                    {/* <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                        transition={{ duration: 0.6, delay: 0 * 0.1 }}
-                        className="group h-full md:col-span-2 lg:col-span-2"
-                    >
-                        <div className="card-professional rounded-2xl p-6 md:p-8 h-full hover:border-purple-primary transition-all duration-300">
-                            <div className="flex items-start justify-between mb-6">
-                                <div className="flex-1">
-                                    <h3 className="text-xl md:text-2xl font-bold text-professional mb-3">{services[0].title}</h3>
-                                    <p className="text-sm md:text-base text-muted-professional leading-relaxed mb-6">
-                                        {services[0].description}
-                                    </p>
-                                </div>
-                                <div className="ml-4">
-                                    <services[0].icon className="w-8 h-8 text-purple-primary" />
-                                </div>
-                            </div>
-                            <div className="flex items-baseline space-x-6">
-                                <div>
-                                    <div className="text-2xl md:text-3xl font-bold text-purple-primary">{services[0].stats.number}</div>
-                                    <div className="text-xs md:text-sm text-muted-professional">{services[0].stats.label}</div>
-                                </div>
-                                {services[0].stats.secondary && (
-                                    <div>
-                                        <div className="text-2xl md:text-3xl font-bold text-purple-primary">{services[0].stats.secondary}</div>
-                                        <div className="text-xs md:text-sm text-muted-professional">{services[0].stats.secondaryLabel}</div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </motion.div> */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
+                    {servicesData.map((service, index) => {
+                        if (!service || !service.id) {
+                            console.warn("Invalid service data:", service)
+                            return null
+                        }
 
-                    {/* Other services */}
-                    {services.slice(0).map((service, index) => (
-                        <motion.div
-                            key={service.title}
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                            transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
-                            className="group h-full md:col-span-2 lg:col-span-2"
-                        >
-                            <div className="card-professional rounded-2xl p-6 md:p-8 h-full hover:border-purple-primary transition-all duration-300">
-                                <div className="flex items-start justify-between mb-6">
-                                    <div className="flex-1">
-                                        <h3 className="text-xl md:text-2xl font-bold text-professional mb-3">{service.title}</h3>
-                                        <p className="text-sm md:text-base text-muted-professional leading-relaxed mb-6">
-                                            {service.description}
-                                        </p>
-                                    </div>
-                                    <div className="ml-4">
-                                        <service.icon className="w-8 h-8 text-purple-primary" />
-                                    </div>
-                                </div>
-                                <div className="flex items-baseline space-x-6">
-                                    <div>
-                                        <div className="text-2xl md:text-3xl font-bold text-purple-primary">{service.stats.number}</div>
-                                        <div className="text-xs md:text-sm text-muted-professional">{service.stats.label}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                        return (
+                            <motion.div
+                                key={service.id}
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                className="group h-full"
+                            >
+                                <Link href={`/services/${service.slug}`} className="block h-full">
+                                    <div className="card-professional rounded-2xl p-6 md:p-8 h-full hover:border-purple-primary transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                                        <div className="flex items-start justify-between mb-6">
+                                            <div className="flex-1">
+                                                <div className="w-12 h-12 bg-purple-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-primary/20 transition-colors duration-300">
+                                                    <Icon name={service.iconName} className="w-6 h-6 text-purple-primary" />
+                                                </div>
+                                                <h3 className="text-xl md:text-2xl font-bold text-professional mb-3 group-hover:text-purple-primary transition-colors duration-300">
+                                                    {service.title}
+                                                </h3>
+                                                <p className="text-sm md:text-base text-muted-professional leading-relaxed mb-6">
+                                                    {service.shortDescription}
+                                                </p>
+                                            </div>
+                                        </div>
 
-                    {/* Contact us - spans remaining space */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                        className="md:col-span-2 lg:col-span-2 flex items-center justify-center"
-                    >
-                        <div className="inline-flex items-center justify-center space-x-4 text-professional cursor-pointer hover:text-purple-primary transition-colors duration-300 group">
-                            <span className="font-semibold text-2xl md:text-3xl">Contact us</span>
-                            <div className="flex items-center mt-2">
-                                <div className="w-12 h-0.5 bg-purple-primary rounded-full"></div>
-                                <div className="w-0 h-0 border-l-8 border-l-purple-primary border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1"></div>
-                            </div>
-                        </div>
-                    </motion.div>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-baseline space-x-6">
+                                                <div>
+                                                    <div className="text-2xl md:text-3xl font-bold text-purple-primary">
+                                                        {service.stats.number}
+                                                    </div>
+                                                    <div className="text-xs md:text-sm text-muted-professional">{service.stats.label}</div>
+                                                </div>
+                                                {service.stats.secondary && (
+                                                    <div>
+                                                        <div className="text-2xl md:text-3xl font-bold text-purple-primary">
+                                                            {service.stats.secondary}
+                                                        </div>
+                                                        <div className="text-xs md:text-sm text-muted-professional">
+                                                            {service.stats.secondaryLabel}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <ArrowRight className="w-5 h-5 text-purple-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                                        </div>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        )
+                    })}
                 </div>
+
+                {/* Call to Action */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                    className="text-center"
+                >
+                    <button
+                        onClick={scrollToContact}
+                        className="inline-flex items-center justify-center space-x-4 text-professional cursor-pointer hover:text-purple-primary transition-colors duration-300 group"
+                    >
+                        <span className="font-semibold text-2xl md:text-3xl">Ready to get started?</span>
+                        <div className="flex items-center mt-2">
+                            <div className="w-12 h-0.5 bg-purple-primary rounded-full group-hover:w-16 transition-all duration-300"></div>
+                            <div className="w-0 h-0 border-l-8 border-l-purple-primary border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1 group-hover:translate-x-1 transition-transform duration-300"></div>
+                        </div>
+                    </button>
+                </motion.div>
             </div>
         </section>
-    );
-};
+    )
+}

@@ -3,21 +3,25 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
-import { Home, Briefcase, Users, HelpCircle, Mail, Moon, Sun } from "lucide-react"
+import { Home, Briefcase, HelpCircle, Mail, Moon, Sun, User, Eye } from "lucide-react"
 import { useTheme } from "next-themes"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 
 const navItems = [
-    { name: "Home", link: "#home", icon: Home },
-    { name: "Services", link: "#services", icon: Briefcase },
-    { name: "Testimonials", link: "#testimonials", icon: Users },
-    { name: "FAQ", link: "#faq", icon: HelpCircle },
-    { name: "Contact", link: "#contact", icon: Mail },
+    { name: "Home", link: "/", icon: Home },
+    { name: "About", link: "/about", icon: User },
+    { name: "Services", link: "/#services", icon: Briefcase },
+    { name: "Works", link: "/works", icon: Eye },
+    { name: "FAQ", link: "/#faq", icon: HelpCircle },
+    { name: "Contact", link: "/#contact", icon: Mail },
 ]
 
 export const FloatingNav = ({ className }: { className?: string }) => {
     const [activeSection, setActiveSection] = useState("home")
     const { setTheme, theme } = useTheme()
+    const pathname = usePathname()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,14 +45,22 @@ export const FloatingNav = ({ className }: { className?: string }) => {
     }, [])
 
     const scrollToSection = (sectionId: string) => {
-        const element = document.getElementById(sectionId)
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth" })
+        if (sectionId.startsWith("#")) {
+            const element = document.getElementById(sectionId.slice(1))
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" })
+            }
         }
     }
 
     const toggleTheme = () => {
         setTheme(theme === "light" ? "dark" : "light")
+    }
+
+    const isActive = (link: string) => {
+        if (link === "/") return pathname === "/"
+        if (link.includes("#")) return activeSection === link.slice(2)
+        return pathname === link
     }
 
     return (
@@ -64,7 +76,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                 "ring-1 ring-border/20",
                 "rounded-2xl transition-all duration-300",
                 "md:top-6 max-w-fit",
-                "bottom-8 max-w-[85vw] md:bottom-auto",
+                "bottom-8 max-w-[95vw] md:max-w-[85vw] md:bottom-auto",
                 "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none",
                 className,
             )}
@@ -86,27 +98,33 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                         alt="Logo"
                         width={30}
                         height={200}
-                        className="mr-2 md:hidden block"
+                        className="mr-2 hidden md:hidden sm:block"
                     />
                 </div>
 
                 {/* Navigation Items */}
                 <div className="flex justify-end items-center w-full md:w-fit gap-8">
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center justify-center w-full space-x-1">
                         {navItems.map((navItem, idx) => (
-                            <button
+                            <Link
                                 key={`link-${idx}`}
-                                onClick={() => scrollToSection(navItem.link.slice(1))}
+                                href={navItem.link}
+                                onClick={(e) => {
+                                    if (navItem.link.startsWith("#")) {
+                                        e.preventDefault()
+                                        scrollToSection(navItem.link)
+                                    }
+                                }}
                                 className={cn(
-                                    "relative flex items-center justify-center px-3 py-2 rounded-xl transition-all duration-200",
+                                    "relative flex items-center justify-center px-4 py-2 rounded-xl transition-all duration-300",
                                     "text-muted-foreground hover:text-foreground",
-                                    "hover:bg-background/20 backdrop-blur-sm",
-                                    activeSection === navItem.link.slice(1) && "text-white drop-shadow-sm",
-                                    "md:text-sm text-xs font-medium",
+                                    "hover:bg-background/30 backdrop-blur-sm",
+                                    isActive(navItem.link) && "text-white drop-shadow-sm",
+                                    "text-sm font-medium",
                                 )}
                             >
                                 <navItem.icon className="md:hidden w-5 h-5" />
-                                {activeSection === navItem.link.slice(1) && (
+                                {isActive(navItem.link) && (
                                     <motion.div
                                         layoutId="activeSection"
                                         className="absolute inset-0 bg-purple-primary/90 backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-primary/30 -z-10"
@@ -115,7 +133,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                                     />
                                 )}
                                 <span className="hidden md:inline relative z-10">{navItem.name}</span>
-                            </button>
+                            </Link>
                         ))}
                     </div>
 

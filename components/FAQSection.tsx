@@ -4,39 +4,7 @@ import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ChevronDown } from "lucide-react"
-
-const faqs = [
-    {
-        question: "What services do you offer?",
-        answer:
-            "We offer comprehensive digital marketing services including website design & development, graphics design, social media management, mobile app development, digital marketing strategies, and brand development.",
-    },
-    {
-        question: "How long does a typical project take?",
-        answer:
-            "Project timelines vary depending on scope and complexity. A typical website project takes 4-8 weeks, while comprehensive branding projects may take 8-12 weeks. We'll provide detailed timelines during our initial consultation.",
-    },
-    {
-        question: "Do you offer ongoing support?",
-        answer:
-            "Yes, we provide ongoing support and maintenance packages to ensure your digital assets continue to perform optimally. Our support includes updates, security monitoring, and performance optimization.",
-    },
-    {
-        question: "What is your design process?",
-        answer:
-            "Our design process involves discovery, strategy, design, development, and launch phases. We work closely with you throughout each stage to ensure the final product exceeds your expectations and achieves your business goals.",
-    },
-    {
-        question: "How do you handle project communication?",
-        answer:
-            "We maintain transparent communication through regular updates, scheduled check-ins, and dedicated project management tools. You'll have direct access to your project team and real-time progress updates.",
-    },
-    {
-        question: "What makes your agency different?",
-        answer:
-            "We combine creative excellence with strategic thinking and cutting-edge technology. Our team focuses on delivering measurable results while creating exceptional user experiences that drive business growth.",
-    },
-]
+import { faqData } from "@/data/faq"
 
 export const FAQSection = () => {
     const ref = useRef(null)
@@ -57,8 +25,17 @@ export const FAQSection = () => {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-12 md:mb-16"
                 >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="inline-flex items-center px-4 py-2 bg-purple-primary/10 border border-purple-primary/20 rounded-full text-purple-primary text-sm font-medium backdrop-blur-sm mb-6"
+                    >
+                        Frequently Asked Questions
+                    </motion.div>
+
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-professional mb-4 md:mb-6">
-                        Frequently Asked Questions<span className="text-purple-primary">.</span>
+                        Got Questions? We Have Answers<span className="text-purple-primary">.</span>
                     </h2>
                     <p className="text-lg md:text-xl text-muted-professional">
                         Everything you need to know about our services and process.
@@ -66,31 +43,35 @@ export const FAQSection = () => {
                 </motion.div>
 
                 <div className="space-y-4">
-                    {faqs.map((faq, index) => (
+                    {faqData.map((faq, index) => (
                         <motion.div
-                            key={index}
+                            key={faq.id}
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                             className={`rounded-2xl overflow-hidden transition-all duration-300 ${openIndex === index
-                                ? "card-professional border border-purple-primary/50"
-                                : "card-professional hover:border-purple-primary"
+                                ? "card-professional border border-purple-primary/50 shadow-lg"
+                                : "card-professional hover:border-purple-primary/30 hover:shadow-md"
                                 }`}
                         >
                             <button
                                 onClick={() => toggleFAQ(index)}
-                                className="w-full px-6 md:px-8 py-6 md:py-8 text-left flex items-center justify-between transition-colors"
+                                className="w-full px-6 md:px-8 py-6 md:py-8 text-left flex items-center justify-between transition-colors hover:bg-purple-primary/5"
                             >
                                 <span
-                                    className={`text-base md:text-lg font-semibold ${openIndex === index ? "text-purple-primary" : "text-professional"
+                                    className={`text-base md:text-lg font-semibold transition-colors duration-300 ${openIndex === index ? "text-purple-primary" : "text-professional"
                                         }`}
                                 >
-                                    {String(index).padStart(2, "0")}. {faq.question}
+                                    {String(index + 1).padStart(2, "0")}. {faq.question}
                                 </span>
-
-                                <motion.div animate={{ rotate: openIndex === index ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                                <motion.div
+                                    animate={{ rotate: openIndex === index ? 180 : 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="flex-shrink-0 ml-4"
+                                >
                                     <ChevronDown
-                                        className={`w-5 h-5 md:w-6 md:h-6 ${openIndex === index ? "text-purple-primary" : "text-muted-professional"}`}
+                                        className={`w-5 h-5 md:w-6 md:h-6 transition-colors duration-300 ${openIndex === index ? "text-purple-primary" : "text-muted-professional"
+                                            }`}
                                     />
                                 </motion.div>
                             </button>
@@ -104,8 +85,8 @@ export const FAQSection = () => {
                                 transition={{ duration: 0.3, ease: "easeInOut" }}
                                 className="overflow-hidden"
                             >
-                                <div className="px-6 md:px-8 pb-6 md:pb-8">
-                                    <p className="text-muted-professional leading-relaxed">{faq.answer}</p>
+                                <div className="px-6 md:px-8 pb-6 md:pb-8 border-t border-border/30">
+                                    <p className="text-muted-professional leading-relaxed pt-4">{faq.answer}</p>
                                 </div>
                             </motion.div>
                         </motion.div>

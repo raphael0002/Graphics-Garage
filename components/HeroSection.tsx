@@ -13,34 +13,80 @@ import {
     MessageCircle,
     Heart,
     Star,
+    Play,
 } from "lucide-react"
+import Link from "next/link"
 
 export const HeroSection = () => {
+    const scrollToContact = () => {
+        const element = document.getElementById("contact")
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" })
+        }
+    }
+
     return (
         <section
             id="home"
             className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300"
         >
+            {/* Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-primary/5 rounded-full blur-3xl animate-pulse" />
+                <div
+                    className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-dark/5 rounded-full blur-3xl animate-pulse"
+                    style={{ animationDelay: "2s" }}
+                />
+            </div>
+
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center justify-center mt-20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center justify-center mt-20">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="space-y-6 md:space-y-8"
                     >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                            className="inline-flex items-center px-4 py-2 bg-purple-primary/10 border border-purple-primary/20 rounded-full text-purple-primary text-sm font-medium backdrop-blur-sm"
+                        >
+                            <Zap className="w-4 h-4 mr-2" />
+                            Digital Solutions That Drive Results
+                        </motion.div>
+
                         <motion.h1
-                            className="flex lg:flex-col sm:mt-20 lg:mt-10 gap-2 md:gap-2 text-5xl md:text-6xl lg:text-8xl font-bold text-professional leading-tight md:leading-none "
+                            className="flex flex-col gap-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-professional leading-tight"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
-                            <span className="dark:text-purple-50 text-purple-primary ">CREATE </span>
-                            <br />
-                            <span className="dark:text-purple-50 text-purple-primary ">DESIGN </span>
-                            <br />
-                            <span className="dark:text-purple-50 text-purple-primary ">BUILD </span>
-
+                            <motion.span
+                                className="dark:text-purple-50 text-purple-primary"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6, delay: 0.5 }}
+                            >
+                                CREATE
+                            </motion.span>
+                            <motion.span
+                                className="dark:text-purple-50 text-purple-primary"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6, delay: 0.7 }}
+                            >
+                                DESIGN
+                            </motion.span>
+                            <motion.span
+                                className="dark:text-purple-50 text-purple-primary"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6, delay: 0.9 }}
+                            >
+                                BUILD
+                            </motion.span>
                         </motion.h1>
 
                         <motion.p
@@ -59,13 +105,46 @@ export const HeroSection = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.8 }}
                         >
-                            <button className="button-primary px-6 md:px-8 py-3 md:py-4 rounded-lg font-medium flex items-center gap-2 group">
-                                View Our Work
-                                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
-                            </button>
-                            <button className="button-secondary px-6 md:px-8 py-3 md:py-4 rounded-lg font-medium">
+                            <Link href="/works">
+                                <motion.button
+                                    className="button-primary w-full px-6 md:px-8 py-3 md:py-4 rounded-xl font-medium flex items-center justify-center gap-2 group shadow-lg hover:shadow-xl transition-all duration-300"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    <Play className="w-4 h-4 md:w-5 md:h-5" />
+                                    View Our Work
+                                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                                </motion.button>
+                            </Link>
+                            <motion.button
+                                onClick={scrollToContact}
+                                className="button-secondary px-6 md:px-8 py-3 md:py-4 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                            >
                                 Get in Touch
-                            </button>
+                            </motion.button>
+                        </motion.div>
+
+                        {/* Stats */}
+                        <motion.div
+                            className="grid grid-cols-3 gap-6 pt-8"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 1 }}
+                        >
+                            <div className="text-center">
+                                <div className="text-2xl md:text-3xl font-bold text-purple-primary">200+</div>
+                                <div className="text-sm text-muted-professional">Projects Completed</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-2xl md:text-3xl font-bold text-purple-primary">50+</div>
+                                <div className="text-sm text-muted-professional">Happy Clients</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-2xl md:text-3xl font-bold text-purple-primary">5+</div>
+                                <div className="text-sm text-muted-professional">Years Experience</div>
+                            </div>
                         </motion.div>
                     </motion.div>
 
@@ -78,7 +157,7 @@ export const HeroSection = () => {
                         <div className="relative flex items-center justify-center min-h-[500px]">
                             {/* Floating Marketing Icons */}
                             <motion.div
-                                className="absolute -top-8 -left-8 w-12 h-12 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-purple-primary/20"
+                                className="absolute -top-8 -left-8 w-12 h-12 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-purple-primary/20 shadow-lg"
                                 animate={{
                                     y: [-10, 10, -10],
                                     rotate: [0, 5, 0],
@@ -89,7 +168,7 @@ export const HeroSection = () => {
                             </motion.div>
 
                             <motion.div
-                                className="absolute -top-4 right-16 w-10 h-10 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-purple-primary/20"
+                                className="absolute -top-4 right-16 w-10 h-10 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-purple-primary/20 shadow-lg"
                                 animate={{
                                     y: [10, -10, 10],
                                     scale: [1, 1.1, 1],
@@ -100,7 +179,7 @@ export const HeroSection = () => {
                             </motion.div>
 
                             <motion.div
-                                className="absolute top-8 -right-12 w-14 h-14 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-purple-primary/20"
+                                className="absolute top-8 -right-12 w-14 h-14 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-purple-primary/20 shadow-lg"
                                 animate={{
                                     y: [-5, 15, -5],
                                     rotate: [0, -5, 0],
@@ -111,7 +190,7 @@ export const HeroSection = () => {
                             </motion.div>
 
                             <motion.div
-                                className="absolute bottom-16 -left-12 w-11 h-11 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-purple-primary/20"
+                                className="absolute bottom-16 -left-12 w-11 h-11 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-xl flex items-center justify-center backdrop-blur-sm border border-purple-primary/20 shadow-lg"
                                 animate={{
                                     y: [5, -15, 5],
                                     rotate: [0, 10, 0],
@@ -122,7 +201,7 @@ export const HeroSection = () => {
                             </motion.div>
 
                             <motion.div
-                                className="absolute bottom-8 right-8 w-10 h-10 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-purple-primary/20"
+                                className="absolute bottom-8 right-8 w-10 h-10 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-purple-primary/20 shadow-lg"
                                 animate={{
                                     y: [-8, 12, -8],
                                     scale: [1, 1.2, 1],
@@ -134,9 +213,8 @@ export const HeroSection = () => {
 
                             {/* Main Digital Marketing Dashboard */}
                             <div className="relative">
-                                {/* Main Monitor/Dashboard */}
                                 <motion.div
-                                    className="w-80 h-48 bg-gradient-to-br from-gray-dark/90 to-navy-dark/90 rounded-2xl relative shadow-2xl border border-purple-primary/20"
+                                    className="w-80 md:w-96 h-60 md:h-72 bg-gradient-to-br from-gray-dark/90 to-navy-dark/90 rounded-2xl relative shadow-2xl border border-purple-primary/20"
                                     animate={{
                                         boxShadow: [
                                             "0 25px 50px -12px rgba(141, 105, 191, 0.1)",
@@ -160,7 +238,6 @@ export const HeroSection = () => {
 
                                         {/* Analytics Charts */}
                                         <div className="grid grid-cols-2 gap-3 h-full">
-                                            {/* Growth Chart */}
                                             <div className="bg-purple-primary/10 rounded-lg p-2 relative overflow-hidden">
                                                 <motion.div
                                                     className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-purple-primary/30 to-transparent"
@@ -171,7 +248,6 @@ export const HeroSection = () => {
                                                 <div className="text-xs text-gray-light">Growth</div>
                                             </div>
 
-                                            {/* Engagement Metrics */}
                                             <div className="bg-purple-dark/20 rounded-lg p-2 relative">
                                                 <div className="flex items-center justify-between mb-2">
                                                     <Heart className="w-4 h-4 text-purple-primary" />
@@ -186,7 +262,6 @@ export const HeroSection = () => {
                                                 <div className="text-xs text-gray-light">Engagement</div>
                                             </div>
 
-                                            {/* Social Media Stats */}
                                             <div className="bg-purple-primary/10 rounded-lg p-2">
                                                 <div className="flex items-center space-x-1 mb-1">
                                                     <Star className="w-3 h-3 text-yellow-400" />
@@ -196,7 +271,6 @@ export const HeroSection = () => {
                                                 <div className="text-xs text-gray-light">Reviews</div>
                                             </div>
 
-                                            {/* Traffic Indicator */}
                                             <div className="bg-purple-dark/20 rounded-lg p-2 relative">
                                                 <motion.div
                                                     className="w-full h-1 bg-purple-primary/20 rounded-full mb-2"
@@ -284,7 +358,7 @@ export const HeroSection = () => {
 
                                 {/* Floating Data Points */}
                                 <motion.div
-                                    className="absolute top-20 left-12 w-8 h-8 bg-gradient-to-br from-green-400/20 to-green-500/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-green-400/30"
+                                    className="absolute top-20 left-12 w-8 h-8 bg-gradient-to-br from-green-400/20 to-green-500/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-green-400/30 shadow-lg"
                                     animate={{
                                         y: [-5, 5, -5],
                                         opacity: [0.7, 1, 0.7],
@@ -295,7 +369,7 @@ export const HeroSection = () => {
                                 </motion.div>
 
                                 <motion.div
-                                    className="absolute bottom-32 right-4 w-6 h-6 bg-gradient-to-br from-blue-400/20 to-blue-500/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-400/30"
+                                    className="absolute bottom-32 right-4 w-6 h-6 bg-gradient-to-br from-blue-400/20 to-blue-500/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-400/30 shadow-lg"
                                     animate={{
                                         y: [3, -3, 3],
                                         opacity: [0.6, 1, 0.6],
@@ -308,29 +382,6 @@ export const HeroSection = () => {
                         </div>
                     </motion.div>
                 </div>
-
-                {/* <motion.div
-                    className="mt-16 md:mt-20"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 1 }}
-                >
-                    <p className="text-muted-professional text-sm mb-6">Trusted by world-class companies</p>
-                    <div className="flex items-center space-x-8 opacity-50">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-4 h-4 bg-purple-primary" style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }} />
-                            <span className="text-muted-professional text-sm">TechFlow</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                            <div className="w-4 h-4 bg-purple-dark rounded-sm" />
-                            <span className="text-muted-professional text-sm">CreativeStudio</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                            <div className="w-4 h-4 bg-purple-primary rounded-full" />
-                            <span className="text-muted-professional text-sm">MarketPro</span>
-                        </div>
-                    </div>
-                </motion.div> */}
             </div>
         </section>
     )

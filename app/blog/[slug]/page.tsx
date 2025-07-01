@@ -1,67 +1,73 @@
-import { FloatingNav } from "@/components/FloatingNav"
-import { Footer } from "@/components/Footer"
-import { notFound } from "next/navigation"
-import type { Metadata } from "next"
-import { BlogPostSection } from "@/components/BlogPostSection"
-import { RelatedPostsSection } from "@/components/RelatedPostsSection"
+import { FloatingNav } from "@/components/FloatingNav";
+import { Footer } from "@/components/Footer";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { BlogPostSection } from "@/components/BlogPostSection";
+import { RelatedPostsSection } from "@/components/RelatedPostsSection";
 
 interface BlogPostPageProps {
-    params: Promise<{
-        slug: string
-    }>
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
 async function getBlogPost(slug: string) {
-    try {
-        const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
-        const response = await fetch(`${baseUrl}/api/blog/slug/${slug}`)
-        if (!response.ok) {
-            return null
-        }
-
-        return response.json()
-    } catch (error) {
-        console.error("Error fetching blog post:", error)
-        return null
+  try {
+    const response = await fetch(`/api/blog/slug/${slug}`);
+    if (!response.ok) {
+      return null;
     }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching blog post:", error);
+    return null;
+  }
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-    const resolvedParams = await params
-    const post = await getBlogPost(resolvedParams.slug)
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const post = await getBlogPost(resolvedParams.slug);
 
-    if (!post) {
-        return {
-            title: "Post Not Found - Graphics Garage",
-            description: "The requested blog post could not be found.",
-        }
-    }
-
+  if (!post) {
     return {
-        title: `${post.title} - Graphics Garage Blog`,
-        description: post.excerpt,
-        openGraph: {
-            title: post.title,
-            description: post.excerpt,
-            images: post.featuredImage ? [post.featuredImage] : [],
-        },
-    }
+      title: "Post Not Found - Graphics Garage",
+      description:
+        "The requested blog post could not be found.",
+    };
+  }
+
+  return {
+    title: `${post.title} - Graphics Garage Blog`,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: post.featuredImage
+        ? [post.featuredImage]
+        : [],
+    },
+  };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-    const resolvedParams = await params
-    const post = await getBlogPost(resolvedParams.slug)
+export default async function BlogPostPage({
+  params,
+}: BlogPostPageProps) {
+  const resolvedParams = await params;
+  const post = await getBlogPost(resolvedParams.slug);
 
-    if (!post) {
-        notFound()
-    }
+  if (!post) {
+    notFound();
+  }
 
-    return (
-        <main className="relative min-h-screen">
-            <FloatingNav />
-            <BlogPostSection post={post} />
-            <RelatedPostsSection currentPost={post} />
-            <Footer />
-        </main>
-    )
+  return (
+    <main className="relative min-h-screen">
+      <FloatingNav />
+      <BlogPostSection post={post} />
+      <RelatedPostsSection currentPost={post} />
+      <Footer />
+    </main>
+  );
 }

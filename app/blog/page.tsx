@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 async function getBlogPosts() {
     try {
-        const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://graphics-garage.onrender.com"
         const response = await fetch(`${baseUrl}/api/blog/posts?published=true`)
 
         if (!response.ok) {

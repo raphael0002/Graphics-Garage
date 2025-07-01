@@ -1088,9 +1088,9 @@ export const BlogListSection = ({
                 No posts found
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                We couldn't find any posts matching your
+                {`We couldn't find any posts matching your
                 search criteria. Try adjusting your filters
-                or search terms.
+                or search terms.`}
               </p>
               {hasActiveFilters && (
                 <Button

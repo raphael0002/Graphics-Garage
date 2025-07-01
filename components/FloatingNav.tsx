@@ -27,14 +27,25 @@ const navItems = [
   { name: "Contact", link: "/#contact", icon: Mail },
 ];
 
-export const FloatingNav = ({ className }: { className?: string }) => {
-  const [activeSection, setActiveSection] = useState("home");
+export const FloatingNav = ({
+  className,
+}: {
+  className?: string;
+}) => {
+  const [activeSection, setActiveSection] =
+    useState("home");
   const { setTheme, theme } = useTheme();
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "services", "testimonials", "faq", "contact"];
+      const sections = [
+        "home",
+        "services",
+        "testimonials",
+        "faq",
+        "contact",
+      ];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -52,13 +63,18 @@ export const FloatingNav = ({ className }: { className?: string }) => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+    return () =>
+      window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId.startsWith("#")) {
-      const element = document.getElementById(sectionId.slice(1));
+      const element = document.getElementById(
+        sectionId.slice(1)
+      );
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
@@ -71,7 +87,8 @@ export const FloatingNav = ({ className }: { className?: string }) => {
 
   const isActive = (link: string) => {
     if (link === "/") return pathname === "/";
-    if (link.includes("#")) return activeSection === link.slice(2);
+    if (link.includes("#"))
+      return activeSection === link.slice(2);
     return pathname === link;
   };
 
@@ -87,37 +104,47 @@ export const FloatingNav = ({ className }: { className?: string }) => {
         "shadow-2xl shadow-black/10 dark:shadow-black/30",
         "ring-1 ring-border/20",
         "rounded-2xl transition-all duration-300",
-        "md:top-6 max-w-fit",
+        "md:top-4 max-w-fit",
         "bottom-8 max-w-[95vw] md:max-w-[85vw] md:bottom-auto",
         "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none",
         className
       )}
     >
-      <div className="flex items-center justify-end relative z-10 w-full">
+      <div className="flex items-center justify-end lg:justify-evenly relative z-10 w-full">
         {/* Logo */}
-        <Link href="/" className="flex items-center absolute left-4">
-          {/* Desktop Logo */}
-          <Image
-            src={theme === "dark" ? "/logo-1.svg" : "/logo-light-2.svg"}
-            alt="Logo"
-            width={150}
-            height={70}
-            className="hidden md:block h-12 w-auto"
-            priority
-          />
-          {/* Mobile Logo */}
-          <Image
-            src={theme === "dark" ? "/logo-2.svg" : "/logo-light-1.svg"}
-            alt="Logo"
-            width={32}
-            height={32}
-            className="hidden sm:block md:hidden h-8 w-auto"
-            priority
-          />
-        </Link>
+        <div className="flex items-center absolute left-4">
+          <Link href="/">
+            {/* Desktop Logo */}
+            <Image
+              src={
+                theme === "dark"
+                  ? "/logo-1.svg"
+                  : "/logo-light-2.svg"
+              }
+              alt="Logo"
+              width={150}
+              height={70}
+              className="hidden md:block h-12 w-auto"
+              priority
+            />
+            {/* Mobile Logo */}
+            <Image
+              src={
+                theme === "dark"
+                  ? "/logo-2.svg"
+                  : "/logo-light-1.svg"
+              }
+              alt="Logo"
+              width={32}
+              height={32}
+              className="hidden sm:block md:hidden h-8 w-auto"
+              priority
+            />
+          </Link>
+        </div>
 
         {/* Navigation Items */}
-        <div className="flex items-center gap-8 w-full">
+        <div className="flex items-center gap-4 lg:w-full">
           <div className="flex items-center justify-center w-full space-x-0.5 sm:space-x-1 ">
             {navItems.map((navItem, idx) => (
               <Link
@@ -133,20 +160,25 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                   "relative flex items-center justify-center px-4 py-2 rounded-xl transition-all duration-300",
                   "text-muted-foreground hover:text-foreground",
                   "hover:bg-background/30 backdrop-blur-sm",
-                  isActive(navItem.link) && "text-white drop-shadow-sm",
+                  isActive(navItem.link) &&
+                    "text-white drop-shadow-sm",
                   "text-sm font-medium"
                 )}
               >
-                <navItem.icon className="md:hidden w-5 h-5 sm:w-6 sm:h-6" />
+                <navItem.icon className="lg:hidden w-5 h-5 sm:w-6 sm:h-6" />
                 {isActive(navItem.link) && (
                   <motion.div
                     layoutId="activeSection"
                     className="absolute inset-0 bg-purple-primary/90 backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-primary/30 -z-10"
                     initial={false}
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 30,
+                    }}
                   />
                 )}
-                <div className="hidden md:inline relative z-10">
+                <div className="hidden lg:inline relative z-10">
                   {navItem.name}
                 </div>
               </Link>
@@ -158,8 +190,8 @@ export const FloatingNav = ({ className }: { className?: string }) => {
             onClick={toggleTheme}
             className="w-8 h-8 hidden rounded-xl bg-background/20 backdrop-blur-sm md:flex items-center justify-center hover:bg-background/30 transition-all duration-200 border border-border/20 shadow-lg ring-1 ring-border/10"
           >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground drop-shadow-sm" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground drop-shadow-sm" />
+            <Sun className="h w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground drop-shadow-sm" />
+            <Moon className="absolute h-6 w-6 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground drop-shadow-sm" />
           </button>
         </div>
       </div>

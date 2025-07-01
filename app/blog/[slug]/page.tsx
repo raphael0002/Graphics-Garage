@@ -84,7 +84,7 @@ export default async function BlogPostPage({
   }
 
   return (
-    <main className="relative min-h-screen">
+    <main className="relative min-h-screen mb-16 md:mb-0">
       <FloatingNav />
       <BlogPostSection post={post} />
       <RelatedPostsSection currentPost={post} />

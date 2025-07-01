@@ -1,16 +1,16 @@
-
 "use client"
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
-import { Calendar, Clock, Eye, Share2, Search, X, Grid, List } from 'lucide-react'
+import { Calendar, Clock, Eye, Share2, Search, Filter, X, ChevronDown, Grid, List } from 'lucide-react'
+import Image from "next/image"
+import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
-import Link from "next/link"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Separator } from "@/components/ui/separator"
 
 interface BlogPost {
     _id: string
@@ -38,21 +38,25 @@ export const BlogListSection = ({ posts }: BlogListSectionProps) => {
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true, margin: "-100px" })
 
-    // Simplified state management
+    // Search and filter states
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("all")
+    const [selectedTag, setSelectedTag] = useState("all")
     const [sortBy, setSortBy] = useState("newest")
     const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>(posts)
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
-    // Extract unique categories
+    // Extract unique categories and tags
     const categories = ["all", ...Array.from(new Set(posts.map((post) => post.category)))]
+    const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)))
+    const tags = ["all", ...allTags]
 
     // Filter and search logic
     useEffect(() => {
         let filtered = [...posts]
 
-        // Search functionality
+        // Search by title, excerpt, category, and tags
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase()
             filtered = filtered.filter(
@@ -61,47 +65,63 @@ export const BlogListSection = ({ posts }: BlogListSectionProps) => {
                     post.excerpt.toLowerCase().includes(query) ||
                     post.category.toLowerCase().includes(query) ||
                     post.tags.some((tag) => tag.toLowerCase().includes(query)) ||
-                    post.author.name.toLowerCase().includes(query)
+                    post.author.name.toLowerCase().includes(query),
             )
         }
 
-        // Category filter
+        // Filter by category
         if (selectedCategory !== "all") {
             filtered = filtered.filter((post) => post.category === selectedCategory)
         }
 
-        // Sorting
+        // Filter by tag
+        if (selectedTag !== "all") {
+            filtered = filtered.filter((post) => post.tags.includes(selectedTag))
+        }
+
+        // Sort posts
         switch (sortBy) {
             case "newest":
                 filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                 break
-            case "popular":
-                filtered.sort((a, b) => b.views - a.views)
-                break
             case "oldest":
                 filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                break
+            case "most-viewed":
+                filtered.sort((a, b) => b.views - a.views)
+                break
+            case "least-viewed":
+                filtered.sort((a, b) => a.views - b.views)
+                break
+            case "longest-read":
+                filtered.sort((a, b) => b.readTime - a.readTime)
+                break
+            case "shortest-read":
+                filtered.sort((a, b) => a.readTime - b.readTime)
                 break
             default:
                 break
         }
 
         setFilteredPosts(filtered)
-    }, [searchQuery, selectedCategory, sortBy, posts])
+    }, [searchQuery, selectedCategory, selectedTag, sortBy, posts])
 
     const clearFilters = () => {
         setSearchQuery("")
         setSelectedCategory("all")
+        setSelectedTag("all")
         setSortBy("newest")
     }
 
-    const hasActiveFilters = searchQuery || selectedCategory !== "all" || sortBy !== "newest"
-    const featuredPosts = filteredPosts.filter((post) => post.featured).slice(0, 2)
+    const hasActiveFilters = searchQuery || selectedCategory !== "all" || selectedTag !== "all" || sortBy !== "newest"
+
+    const featuredPosts = filteredPosts.filter((post) => post.featured).slice(0, 3)
     const regularPosts = filteredPosts.filter((post) => !post.featured)
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("en-US", {
             year: "numeric",
-            month: "short",
+            month: "long",
             day: "numeric",
         })
     }
@@ -121,122 +141,291 @@ export const BlogListSection = ({ posts }: BlogListSectionProps) => {
             }
         } else {
             navigator.clipboard.writeText(url)
-            // Toast notification would be better here
+            // You could add a toast notification here instead of alert
             alert("Link copied to clipboard!")
         }
     }
 
     return (
-        <section className="py-20 section-light min-h-screen">
-            <div className="container mx-auto px-6 max-w-7xl">
+        <section className="py-16 md:py-20 section-light transition-colors duration-300 relative">
 
-                {/* Search and Filter Bar */}
+            <div className="container mx-auto px-4 md:px-6 relative">
+                {/* Enhanced Search and Filter Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                    ref={ref}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.6 }}
                     className="mb-12"
                 >
-                    <Card className="bg-white/100 border-0">
-                        <CardContent className="p-6">
-                            {/* Top Row - Search and View Toggle */}
-                            <div className="flex flex-col md:flex-row lg:flex-row gap-4 mb-6">
-                                <div className="relative flex-1">
-                                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                                    <Input
-                                        type="text"
-                                        placeholder="Search articles, authors, or topics..."
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-12 pr-12 py-6 text-lg border-slate-200 focus:border-slate-900 focus:ring-slate-900/10 rounded-xl bg-white transition-all duration-200"
-                                    />
-                                    {searchQuery && (
-                                        <button
-                                            onClick={() => setSearchQuery("")}
-                                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                                        >
-                                            <X className="w-5 h-5" />
-                                        </button>
-                                    )}
-                                </div>
+                    <div>
+                        {/* Header */}
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                            <div>
+                                <h2 className="text-2xl md:text-3xl font-bold text-professional mb-2">
+                                    Explore Our Content<span className="text-purple-primary">.</span>
+                                </h2>
+                                <p className="text-muted-professional">
+                                    {`Find exactly what you're looking for with our advanced search and filters`}
+                                </p>
+                            </div>
 
-                                {/* View Mode Toggle */}
-                                <div className="flex items-center bg-slate-100 rounded-xl p-1">
+                            {/* View Mode Toggle */}
+                            <div className="flex items-center gap-2 mt-4 md:mt-0">
+                                <span className="text-sm text-muted-professional mr-2">View:</span>
+                                <div className="flex items-center bg-muted rounded-xl p-1">
                                     <button
                                         onClick={() => setViewMode("grid")}
-                                        className={`p-3 rounded-lg transition-all duration-200 ${viewMode === "grid"
-                                            ? "card-professional shadow-sm text-slate-900"
-                                            : "text-slate-500 hover:text-slate-700"
+                                        className={`p-2 rounded-lg transition-all duration-200 ${viewMode === "grid"
+                                            ? "bg-background shadow-sm text-professional"
+                                            : "text-muted-professional hover:text-professional"
                                             }`}
                                     >
-                                        <Grid className="w-5 h-5" />
+                                        <Grid className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => setViewMode("list")}
-                                        className={`p-3 rounded-lg transition-all duration-200 ${viewMode === "list"
-                                            ? "card-professional shadow-sm text-slate-900"
-                                            : "text-slate-500 hover:text-slate-700"
+                                        className={`p-2 rounded-lg transition-all duration-200 ${viewMode === "list"
+                                            ? "bg-background shadow-sm text-professional"
+                                            : "text-muted-professional hover:text-professional"
                                             }`}
                                     >
-                                        <List className="w-5 h-5" />
+                                        <List className="w-4 h-4" />
                                     </button>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Bottom Row - Filters */}
-                            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-sm font-medium text-slate-700 whitespace-nowrap">Category:</span>
-                                        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                                            <SelectTrigger className="w-48 border-slate-200 focus:border-slate-900 rounded-lg bg-white">
-                                                <SelectValue placeholder="All Categories" />
-                                            </SelectTrigger>
-                                            <SelectContent className="rounded-lg border-slate-200 bg-white shadow-xl">
-                                                {categories.map((category) => (
-                                                    <SelectItem key={category} value={category} className="rounded-md">
-                                                        {category === "all" ? "All Categories" : category}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                        <Separator className="mb-6" />
 
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-sm font-medium text-slate-700 whitespace-nowrap">Sort by:</span>
-                                        <Select value={sortBy} onValueChange={setSortBy}>
-                                            <SelectTrigger className="w-40 border-slate-200 focus:border-slate-900 rounded-lg bg-white">
-                                                <SelectValue placeholder="Sort by" />
-                                            </SelectTrigger>
-                                            <SelectContent className="rounded-lg border-slate-200 bg-white shadow-xl">
-                                                <SelectItem value="newest" className="rounded-md">Latest</SelectItem>
-                                                <SelectItem value="popular" className="rounded-md">Popular</SelectItem>
-                                                <SelectItem value="oldest" className="rounded-md">Oldest</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-
-                                {/* Results count and clear filters */}
-                                <div className="flex items-center gap-4">
-                                    <span className="text-sm text-slate-600">
-                                        {filteredPosts.length} article{filteredPosts.length !== 1 ? 's' : ''}
-                                    </span>
-                                    {hasActiveFilters && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={clearFilters}
-                                            className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
-                                        >
-                                            <X className="w-4 h-4 mr-2" />
-                                            Clear
-                                        </Button>
-                                    )}
-                                </div>
+                        {/* Search and Filters */}
+                        <div className="space-y-6">
+                            {/* Search Input */}
+                            <div className="relative">
+                                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-professional w-5 h-5" />
+                                <Input
+                                    type="text"
+                                    placeholder="Search posts by title, category, tags, or author..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="pl-12 pr-4 py-4 text-lg border-border focus:border-purple-primary focus:ring-purple-primary/20 rounded-2xl bg-background/50 backdrop-blur-sm transition-all duration-200"
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery("")}
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-professional hover:text-professional transition-colors"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
+                                )}
                             </div>
-                        </CardContent>
-                    </Card>
+
+                            {/* Desktop Filters */}
+                            <div className="hidden lg:flex items-center gap-4 flex-wrap">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-professional">Category:</span>
+                                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                                        <SelectTrigger className="w-48 border-border focus:border-purple-primary rounded-xl bg-background/50 backdrop-blur-sm">
+                                            <SelectValue placeholder="All Categories" />
+                                            <ChevronDown className="w-4 h-4 opacity-50" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-xl border-border bg-background/95 backdrop-blur-sm">
+                                            {categories.map((category) => (
+                                                <SelectItem key={category} value={category} className="rounded-lg">
+                                                    {category === "all" ? "All Categories" : category}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-professional">Tag:</span>
+                                    <Select value={selectedTag} onValueChange={setSelectedTag}>
+                                        <SelectTrigger className="w-40 border-border focus:border-purple-primary rounded-xl bg-background/50 backdrop-blur-sm">
+                                            <SelectValue placeholder="All Tags" />
+                                            <ChevronDown className="w-4 h-4 opacity-50" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-xl border-border bg-background/95 backdrop-blur-sm">
+                                            {tags.map((tag) => (
+                                                <SelectItem key={tag} value={tag} className="rounded-lg">
+                                                    {tag === "all" ? "All Tags" : tag}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-professional">Sort:</span>
+                                    <Select value={sortBy} onValueChange={setSortBy}>
+                                        <SelectTrigger className="w-48 border-border focus:border-purple-primary rounded-xl bg-background/50 backdrop-blur-sm">
+                                            <SelectValue placeholder="Sort by" />
+                                            <ChevronDown className="w-4 h-4 opacity-50" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-xl border-border bg-background/95 backdrop-blur-sm">
+                                            <SelectItem value="newest" className="rounded-lg">Newest First</SelectItem>
+                                            <SelectItem value="oldest" className="rounded-lg">Oldest First</SelectItem>
+                                            <SelectItem value="most-viewed" className="rounded-lg">Most Viewed</SelectItem>
+                                            <SelectItem value="least-viewed" className="rounded-lg">Least Viewed</SelectItem>
+                                            <SelectItem value="longest-read" className="rounded-lg">Longest Read</SelectItem>
+                                            <SelectItem value="shortest-read" className="rounded-lg">Shortest Read</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                {hasActiveFilters && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={clearFilters}
+                                        className="border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 rounded-xl bg-transparent"
+                                    >
+                                        <X className="w-4 h-4 mr-2" />
+                                        Clear Filters
+                                    </Button>
+                                )}
+                            </div>
+
+                            {/* Mobile Filter Button */}
+                            <div className="lg:hidden">
+                                <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                                    <SheetTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            className="w-full border-border rounded-xl bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-200"
+                                        >
+                                            <Filter className="w-4 h-4 mr-2" />
+                                            Filters & Sort
+                                            {hasActiveFilters && (
+                                                <Badge variant="secondary" className="ml-2 bg-purple-primary/10 text-purple-primary">
+                                                    {[searchQuery, selectedCategory !== "all", selectedTag !== "all", sortBy !== "newest"].filter(Boolean).length}
+                                                </Badge>
+                                            )}
+                                        </Button>
+                                    </SheetTrigger>
+                                    <SheetContent className="w-full sm:max-w-md">
+                                        <SheetHeader>
+                                            <SheetTitle className="text-professional">Filter & Sort Posts</SheetTitle>
+                                            <SheetDescription className="text-muted-professional">
+                                                {`Refine your search to find exactly what you're looking for`}
+                                            </SheetDescription>
+                                        </SheetHeader>
+                                        <div className="space-y-6 mt-6">
+                                            <div>
+                                                <label className="text-sm font-medium text-professional mb-3 block">Category</label>
+                                                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                                                    <SelectTrigger className="w-full rounded-xl">
+                                                        <SelectValue placeholder="Select category" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {categories.map((category) => (
+                                                            <SelectItem key={category} value={category}>
+                                                                {category === "all" ? "All Categories" : category}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            <div>
+                                                <label className="text-sm font-medium text-professional mb-3 block">Tag</label>
+                                                <Select value={selectedTag} onValueChange={setSelectedTag}>
+                                                    <SelectTrigger className="w-full rounded-xl">
+                                                        <SelectValue placeholder="Select tag" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {tags.map((tag) => (
+                                                            <SelectItem key={tag} value={tag}>
+                                                                {tag === "all" ? "All Tags" : tag}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            <div>
+                                                <label className="text-sm font-medium text-professional mb-3 block">Sort By</label>
+                                                <Select value={sortBy} onValueChange={setSortBy}>
+                                                    <SelectTrigger className="w-full rounded-xl">
+                                                        <SelectValue placeholder="Sort by" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="newest">Newest First</SelectItem>
+                                                        <SelectItem value="oldest">Oldest First</SelectItem>
+                                                        <SelectItem value="most-viewed">Most Viewed</SelectItem>
+                                                        <SelectItem value="least-viewed">Least Viewed</SelectItem>
+                                                        <SelectItem value="longest-read">Longest Read</SelectItem>
+                                                        <SelectItem value="shortest-read">Shortest Read</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            {hasActiveFilters && (
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={clearFilters}
+                                                    className="w-full border-red-200 text-red-600 hover:bg-red-50 bg-transparent rounded-xl"
+                                                >
+                                                    <X className="w-4 h-4 mr-2" />
+                                                    Clear All Filters
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </SheetContent>
+                                </Sheet>
+                            </div>
+
+                            {/* Active Filters Display */}
+                            {hasActiveFilters && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="flex flex-wrap gap-2 pt-4 border-t border-border"
+                                >
+                                    <span className="text-sm font-medium text-professional">Active filters:</span>
+                                    {searchQuery && (
+                                        <Badge variant="secondary" className="bg-blue-100 text-blue-700 rounded-full">
+                                            Search: {`"${searchQuery}"`}
+                                        </Badge>
+                                    )}
+                                    {selectedCategory !== "all" && (
+                                        <Badge variant="secondary" className="bg-green-100 text-green-700 rounded-full">
+                                            Category: {selectedCategory}
+                                        </Badge>
+                                    )}
+                                    {selectedTag !== "all" && (
+                                        <Badge variant="secondary" className="bg-orange-100 text-orange-700 rounded-full">
+                                            Tag: {selectedTag}
+                                        </Badge>
+                                    )}
+                                    {sortBy !== "newest" && (
+                                        <Badge variant="secondary" className="bg-purple-100 text-purple-700 rounded-full">
+                                            Sort: {sortBy.replace("-", " ")}
+                                        </Badge>
+                                    )}
+                                </motion.div>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Results Summary */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="mb-8 flex items-center justify-between"
+                >
+                    <div>
+                        <p className="text-muted-professional">
+                            {filteredPosts.length === 0
+                                ? "No posts found matching your criteria"
+                                : `Showing ${filteredPosts.length} ${filteredPosts.length === 1 ? "post" : "posts"}`}
+                            {hasActiveFilters && ` (filtered from ${posts.length} total)`}
+                        </p>
+                    </div>
                 </motion.div>
 
                 {/* Featured Posts */}

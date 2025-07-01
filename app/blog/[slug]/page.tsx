@@ -6,18 +6,20 @@ import { BlogPostSection } from "@/components/BlogPostSection";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
 
 interface BlogPostPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
 
 async function getBlogPost(slug: string) {
   try {
-    const response = await fetch(`/api/blog/slug/${slug}`);
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://graphics-garage.vercel.app";
+    const response = await fetch(
+      `${baseUrl}/api/blog/slug/${slug}`
+    );
     if (!response.ok) {
       return null;
     }
-
     return response.json();
   } catch (error) {
     console.error("Error fetching blog post:", error);
@@ -52,12 +54,29 @@ export async function generateMetadata({
   };
 }
 
+export async function generateStaticParams() {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://graphics-garage.vercel.app";
+  const response = await fetch(
+    `${baseUrl}/api/blog/posts?published=true`
+  );
+  const data = await response.json();
+  return data.posts.map((post: { slug: string }) => ({
+    slug: post.slug,
+  }));
+}
+
 export default async function BlogPostPage({
   params,
 }: BlogPostPageProps) {
   const resolvedParams = await params;
+  console.log(
+    "Fetching post with slug:",
+    resolvedParams.slug
+  );
   const post = await getBlogPost(resolvedParams.slug);
-
+  console.log("Fetched post:", post);
   if (!post) {
     notFound();
   }

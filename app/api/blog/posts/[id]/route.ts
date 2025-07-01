@@ -1,4 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server";
+import {
+  type NextRequest,
+  NextResponse,
+} from "next/server";
 import connectDB from "@/lib/mongodb";
 import BlogPost from "@/models/BlogPost";
 
@@ -15,15 +18,27 @@ export async function GET(
       .lean();
 
     if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Post not found" },
+        {
+          status: 404,
+          headers: { "Cache-Control": "no-store" },
+        }
+      );
     }
 
-    return NextResponse.json(post);
+    return NextResponse.json(post, {
+      status: 200,
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
     console.error("Error fetching post:", error);
     return NextResponse.json(
       { error: "Failed to fetch post" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store" },
+      }
     );
   }
 }
@@ -37,20 +52,36 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const post = await BlogPost.findByIdAndUpdate(id, body, {
-      new: true,
-    }).populate("author", "name email avatar");
+    const post = await BlogPost.findByIdAndUpdate(
+      id,
+      body,
+      {
+        new: true,
+      }
+    ).populate("author", "name email avatar");
 
     if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Post not found" },
+        {
+          status: 404,
+          headers: { "Cache-Control": "no-store" },
+        }
+      );
     }
 
-    return NextResponse.json(post);
+    return NextResponse.json(post, {
+      status: 200,
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
     console.error("Error updating post:", error);
     return NextResponse.json(
       { error: "Failed to update post" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store" },
+      }
     );
   }
 }
@@ -66,15 +97,30 @@ export async function DELETE(
     const post = await BlogPost.findByIdAndDelete(id);
 
     if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Post not found" },
+        {
+          status: 404,
+          headers: { "Cache-Control": "no-store" },
+        }
+      );
     }
 
-    return NextResponse.json({ message: "Post deleted successfully" });
+    return NextResponse.json(
+      { message: "Post deleted successfully" },
+      {
+        status: 200,
+        headers: { "Cache-Control": "no-store" },
+      }
+    );
   } catch (error) {
     console.error("Error deleting post:", error);
     return NextResponse.json(
       { error: "Failed to delete post" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store" },
+      }
     );
   }
 }

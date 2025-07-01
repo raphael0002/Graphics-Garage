@@ -1,4 +1,7 @@
-import { type NextRequest, NextResponse } from "next/server";
+import {
+  type NextRequest,
+  NextResponse,
+} from "next/server";
 import connectDB from "@/lib/mongodb";
 import BlogPost from "@/models/BlogPost";
 
@@ -18,8 +21,12 @@ export async function GET(request: NextRequest) {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
-    const page = Number.parseInt(searchParams.get("page") || "1");
-    const limit = Number.parseInt(searchParams.get("limit") || "10");
+    const page = Number.parseInt(
+      searchParams.get("page") || "1"
+    );
+    const limit = Number.parseInt(
+      searchParams.get("limit") || "10"
+    );
     const category = searchParams.get("category");
     const featured = searchParams.get("featured");
     const published = searchParams.get("published");
@@ -58,20 +65,29 @@ export async function GET(request: NextRequest) {
 
     const total = await BlogPost.countDocuments(query);
 
-    return NextResponse.json({
-      posts,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
+    return NextResponse.json(
+      {
+        posts,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
       },
-    });
+      {
+        status: 200,
+        headers: { "Cache-Control": "no-store" },
+      }
+    );
   } catch (error) {
     console.error("Error fetching posts:", error);
     return NextResponse.json(
       { error: "Failed to fetch posts" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store" },
+      }
     );
   }
 }
@@ -120,12 +136,18 @@ export async function POST(request: NextRequest) {
     await post.save();
     await post.populate("author", "name email avatar");
 
-    return NextResponse.json(post, { status: 201 });
+    return NextResponse.json(post, {
+      status: 201,
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
     console.error("Error creating post:", error);
     return NextResponse.json(
       { error: "Failed to create post" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store" },
+      }
     );
   }
 }

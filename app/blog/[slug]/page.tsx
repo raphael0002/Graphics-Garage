@@ -15,7 +15,8 @@ async function getBlogPost(slug: string) {
       process.env.NEXT_PUBLIC_SITE_URL ||
       "https://graphics-garage.vercel.app";
     const response = await fetch(
-      `${baseUrl}/api/blog/slug/${slug}`
+      `${baseUrl}/api/blog/slug/${slug}`,
+      { cache: "no-store" }
     );
     if (!response.ok) {
       return null;
@@ -59,7 +60,8 @@ export async function generateStaticParams() {
     process.env.NEXT_PUBLIC_SITE_URL ||
     "https://graphics-garage.vercel.app";
   const response = await fetch(
-    `${baseUrl}/api/blog/posts?published=true`
+    `${baseUrl}/api/blog/posts?published=true`,
+    { cache: "no-store" }
   );
   const data = await response.json();
   return data.posts.map((post: { slug: string }) => ({

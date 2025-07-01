@@ -14,9 +14,10 @@ async function getBlogPosts() {
   try {
     const baseUrl =
       process.env.NEXT_PUBLIC_SITE_URL ||
-      "https://graphics-garage.onrender.com";
+      "https://graphics-garage.vercel.app";
     const response = await fetch(
-      `${baseUrl}/api/blog/posts?published=true`
+      `${baseUrl}/api/blog/posts?published=true`,
+      { cache: "no-store" }
     );
 
     if (!response.ok) {

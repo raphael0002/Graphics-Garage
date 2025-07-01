@@ -233,7 +233,7 @@ export default function AdminDashboard() {
                         className="card-professional p-6 rounded-xl"
                     >
                         <h2 className="text-lg font-semibold text-professional mb-6">Quick Actions</h2>
-                        <div className="space-y-4">
+                        <div className="flex flex-col space-y-4">
                             <Link href="/admin/posts/new">
                                 <button className="w-full flex items-center space-x-3 p-4 border border-border rounded-lg hover:bg-card/50 transition-colors">
                                     <Plus className="w-5 h-5 text-purple-primary" />

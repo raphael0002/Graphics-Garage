@@ -1,19 +1,31 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { motion } from "framer-motion"
-import { ArrowLeft, Save, Eye } from "lucide-react"
+import { ArrowLeft, Save, X } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge"
 import type { BlogPostFormData } from "@/types/blog"
 
 export default function NewPost() {
     const { data: session } = useSession()
     const router = useRouter()
     const [loading, setLoading] = useState(false)
+    const [tags, setTags] = useState<string[]>([])
+    const [currentTag, setCurrentTag] = useState("")
+    const [keywords, setKeywords] = useState<string[]>([])
+    const [currentKeyword, setCurrentKeyword] = useState("")
+
     const [formData, setFormData] = useState<BlogPostFormData>({
         title: "",
         slug: "",
@@ -45,7 +57,7 @@ export default function NewPost() {
             .trim()
     }
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target
 
         if (name === "title") {
@@ -71,28 +83,65 @@ export default function NewPost() {
         }
     }
 
+    const handleCategoryChange = (value: string) => {
+        setFormData((prev) => ({ ...prev, category: value }))
+    }
+
+    const addTag = () => {
+        if (currentTag.trim() && !tags.includes(currentTag.trim())) {
+            const newTags = [...tags, currentTag.trim()]
+            setTags(newTags)
+            setFormData((prev) => ({ ...prev, tags: newTags.join(", ") }))
+            setCurrentTag("")
+        }
+    }
+
+    const removeTag = (tagToRemove: string) => {
+        const newTags = tags.filter(tag => tag !== tagToRemove)
+        setTags(newTags)
+        setFormData((prev) => ({ ...prev, tags: newTags.join(", ") }))
+    }
+
+    const addKeyword = () => {
+        if (currentKeyword.trim() && !keywords.includes(currentKeyword.trim())) {
+            const newKeywords = [...keywords, currentKeyword.trim()]
+            setKeywords(newKeywords)
+            setFormData((prev) => ({
+                ...prev,
+                seo: {
+                    ...prev.seo,
+                    keywords: newKeywords.join(", ")
+                }
+            }))
+            setCurrentKeyword("")
+        }
+    }
+
+    const removeKeyword = (keywordToRemove: string) => {
+        const newKeywords = keywords.filter(keyword => keyword !== keywordToRemove)
+        setKeywords(newKeywords)
+        setFormData((prev) => ({
+            ...prev,
+            seo: {
+                ...prev.seo,
+                keywords: newKeywords.join(", ")
+            }
+        }))
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
 
         try {
-            const tagsArray = formData.tags
-                .split(",")
-                .map((tag) => tag.trim())
-                .filter((tag) => tag)
-            const keywordsArray = formData.seo.keywords
-                .split(",")
-                .map((keyword) => keyword.trim())
-                .filter((keyword) => keyword)
-
             const postData = {
                 ...formData,
-                tags: tagsArray,
+                tags: tags,
                 seo: {
                     ...formData.seo,
-                    keywords: keywordsArray,
+                    keywords: keywords,
                 },
-                author: session?.user?.id // Add the current user's ID as the author
+                author: session?.user?.id
             }
 
             const response = await fetch("/api/blog/posts", {
@@ -118,238 +167,323 @@ export default function NewPost() {
 
     if (!session) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading...</p>
+                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading...</p>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200">
+            <header className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 gap-4">
                         <div className="flex items-center space-x-4">
                             <Link href="/admin/dashboard">
-                                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="gap-2 transition-colors duration-300 hover:bg-purple-primary/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-primary rounded-md"
+                                >
                                     <ArrowLeft className="w-4 h-4" />
-                                    <span>Back to Dashboard</span>
-                                </button>
+                                    <span className="hidden sm:inline">Back to Dashboard</span>
+                                    <span className="sm:hidden">Back</span>
+                                </Button>
                             </Link>
-                            <h1 className="text-2xl font-bold text-gray-900">Create New Post</h1>
+
                         </div>
-                        <div className="flex items-center space-x-4">
-                            <button
-                                type="button"
-                                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-                            >
-                                <Eye className="w-4 h-4" />
-                                <span>Preview</span>
-                            </button>
-                            <button
-                                form="post-form"
-                                type="submit"
-                                disabled={loading}
-                                className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 transition-colors disabled:opacity-50"
-                            >
-                                <Save className="w-4 h-4" />
-                                <span>{loading ? "Creating..." : "Create Post"}</span>
-                            </button>
+                        <div className="flex items-center justify-between gap-2 w-full">
+                            <h1 className="text-xl sm:text-2xl font-bold text-foreground">Create New Post</h1>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    form="post-form"
+                                    type="submit"
+                                    disabled={loading}
+                                    size="sm"
+                                    className="gap-2"
+                                >
+                                    <Save className="w-4 h-4" />
+                                    <span>{loading ? "Creating..." : "Create Post"}</span>
+                                </Button>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
             </header>
 
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 <motion.form
                     id="post-form"
                     onSubmit={handleSubmit}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="space-y-8"
+                    className="space-y-6 sm:space-y-8"
                 >
                     {/* Basic Information */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-6">Basic Information</h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
-                                <input
-                                    type="text"
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Basic Information</CardTitle>
+                            <CardDescription>
+                                Essential details about your blog post
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="title">Title *</Label>
+                                <Input
+                                    id="title"
                                     name="title"
                                     value={formData.title}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
                                     placeholder="Enter post title"
+                                    className="text-base"
                                     required
                                 />
                             </div>
 
-                            <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Slug *</label>
-                                <input
-                                    type="text"
+                            <div className="space-y-2">
+                                <Label htmlFor="slug">URL Slug *</Label>
+                                <Input
+                                    id="slug"
                                     name="slug"
                                     value={formData.slug}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
                                     placeholder="post-url-slug"
+                                    className="text-base font-mono"
                                     required
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-                                <select
-                                    name="category"
-                                    value={formData.category}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
-                                    required
-                                >
-                                    <option value="">Select Category</option>
-                                    <option value="Web Design">Web Design</option>
-                                    <option value="Development">Development</option>
-                                    <option value="Digital Marketing">Digital Marketing</option>
-                                    <option value="UI/UX">UI/UX</option>
-                                    <option value="Branding">Branding</option>
-                                    <option value="Company News">Company News</option>
-                                </select>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="category">Category *</Label>
+                                    <Select value={formData.category} onValueChange={handleCategoryChange} required>
+                                        <SelectTrigger id="category">
+                                            <SelectValue placeholder="Select Category" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Web Design">Web Design</SelectItem>
+                                            <SelectItem value="Development">Development</SelectItem>
+                                            <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
+                                            <SelectItem value="UI/UX">UI/UX</SelectItem>
+                                            <SelectItem value="Branding">Branding</SelectItem>
+                                            <SelectItem value="Company News">Company News</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="featuredImage">Featured Image URL</Label>
+                                    <Input
+                                        id="featuredImage"
+                                        name="featuredImage"
+                                        type="url"
+                                        value={formData.featuredImage}
+                                        onChange={handleInputChange}
+                                        placeholder="https://example.com/image.jpg"
+                                        className="text-base"
+                                    />
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Tags (comma separated)</label>
-                                <input
-                                    type="text"
-                                    name="tags"
-                                    value={formData.tags}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
-                                    placeholder="web design, react, nextjs"
-                                />
+                            <div className="space-y-2">
+                                <Label htmlFor="tags">Tags</Label>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                    {tags.map((tag, index) => (
+                                        <Badge key={index} variant="secondary" className="gap-1">
+                                            {tag}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeTag(tag)}
+                                                className="ml-1 hover:text-destructive"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                </div>
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={currentTag}
+                                        onChange={(e) => setCurrentTag(e.target.value)}
+                                        placeholder="Add a tag"
+                                        className="flex-1"
+                                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                                    />
+                                    <Button type="button" onClick={addTag} variant="outline" size="sm">
+                                        Add
+                                    </Button>
+                                </div>
                             </div>
 
-                            <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Featured Image URL</label>
-                                <input
-                                    type="url"
-                                    name="featuredImage"
-                                    value={formData.featuredImage}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
-                                    placeholder="https://example.com/image.jpg"
-                                />
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Excerpt *</label>
-                                <textarea
+                            <div className="space-y-2">
+                                <Label htmlFor="excerpt">Excerpt *</Label>
+                                <Textarea
+                                    id="excerpt"
                                     name="excerpt"
                                     value={formData.excerpt}
                                     onChange={handleInputChange}
                                     rows={3}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors resize-none"
                                     placeholder="Brief description of the post"
+                                    className="resize-none"
                                     required
                                 />
                             </div>
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
 
                     {/* Content */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-6">Content</h2>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Content *</label>
-                            <textarea
-                                name="content"
-                                value={formData.content}
-                                onChange={handleInputChange}
-                                rows={20}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors resize-none"
-                                placeholder="Write your post content here... (Markdown supported)"
-                                required
-                            />
-                        </div>
-                    </div>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Content</CardTitle>
+                            <CardDescription>
+                                Write your blog post content (Markdown supported)
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-2">
+                                <Label htmlFor="content">Content *</Label>
+                                <Textarea
+                                    id="content"
+                                    name="content"
+                                    value={formData.content}
+                                    onChange={handleInputChange}
+                                    rows={20}
+                                    placeholder="Write your post content here... (Markdown supported)"
+                                    className="resize-none font-mono text-sm"
+                                    required
+                                />
+                            </div>
+                        </CardContent>
+                    </Card>
 
                     {/* SEO Settings */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-6">SEO Settings</h2>
-
-                        <div className="space-y-6">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
-                                <input
-                                    type="text"
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>SEO Settings</CardTitle>
+                            <CardDescription>
+                                Optimize your post for search engines
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="metaTitle">Meta Title</Label>
+                                <Input
+                                    id="metaTitle"
                                     name="seo.metaTitle"
                                     value={formData.seo.metaTitle}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
                                     placeholder="SEO title for search engines"
+                                    className="text-base"
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
-                                <textarea
+                            <div className="space-y-2">
+                                <Label htmlFor="metaDescription">Meta Description</Label>
+                                <Textarea
+                                    id="metaDescription"
                                     name="seo.metaDescription"
                                     value={formData.seo.metaDescription}
                                     onChange={handleInputChange}
                                     rows={3}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors resize-none"
                                     placeholder="SEO description for search engines"
+                                    className="resize-none"
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Keywords (comma separated)</label>
-                                <input
-                                    type="text"
-                                    name="seo.keywords"
-                                    value={formData.seo.keywords}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
-                                    placeholder="keyword1, keyword2, keyword3"
-                                />
+                            <div className="space-y-2">
+                                <Label htmlFor="keywords">SEO Keywords</Label>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                    {keywords.map((keyword, index) => (
+                                        <Badge key={index} variant="outline" className="gap-1">
+                                            {keyword}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeKeyword(keyword)}
+                                                className="ml-1 hover:text-destructive"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                </div>
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={currentKeyword}
+                                        onChange={(e) => setCurrentKeyword(e.target.value)}
+                                        placeholder="Add a keyword"
+                                        className="flex-1"
+                                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addKeyword())}
+                                    />
+                                    <Button type="button" onClick={addKeyword} variant="outline" size="sm">
+                                        Add
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
 
                     {/* Publishing Options */}
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-6">Publishing Options</h2>
-
-                        <div className="space-y-4">
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    name="published"
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Publishing Options</CardTitle>
+                            <CardDescription>
+                                Control how and when your post is published
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="published"
                                     checked={formData.published}
-                                    onChange={handleInputChange}
-                                    className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                    onCheckedChange={(checked) =>
+                                        setFormData(prev => ({ ...prev, published: checked as boolean }))
+                                    }
                                 />
-                                <label className="ml-2 text-sm text-gray-700">Publish immediately</label>
+                                <Label
+                                    htmlFor="published"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    Publish immediately
+                                </Label>
                             </div>
 
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    name="featured"
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="featured"
                                     checked={formData.featured}
-                                    onChange={handleInputChange}
-                                    className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                    onCheckedChange={(checked) =>
+                                        setFormData(prev => ({ ...prev, featured: checked as boolean }))
+                                    }
                                 />
-                                <label className="ml-2 text-sm text-gray-700">Mark as featured post</label>
+                                <Label
+                                    htmlFor="featured"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    Mark as featured post
+                                </Label>
                             </div>
-                        </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Mobile Submit Button */}
+                    <div className="sm:hidden">
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full gap-2"
+                            size="lg"
+                        >
+                            <Save className="w-4 h-4" />
+                            <span>{loading ? "Creating..." : "Create Post"}</span>
+                        </Button>
                     </div>
                 </motion.form>
             </div>

@@ -52,8 +52,10 @@ export const BlogListSection = ({ posts }: BlogListSectionProps) => {
     const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)))
     const tags = ["all", ...allTags]
 
+    console.log(posts)
     // Filter and search logic
     useEffect(() => {
+        console.log("Filtering posts...")
         let filtered = [...posts]
 
         // Search by title, excerpt, category, and tags

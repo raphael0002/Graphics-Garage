@@ -18,8 +18,10 @@ async function getBlogPosts() {
             throw new Error("Failed to fetch posts")
         }
 
-        const data = await response.json()
+        const data = await response.json();
+        console.log(data.posts)
         return data.posts || []
+
     } catch (error) {
         console.error("Error fetching blog posts:", error)
         return []

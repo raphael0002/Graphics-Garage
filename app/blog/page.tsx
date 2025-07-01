@@ -1,3 +1,4 @@
+"use client"
 import { FloatingNav } from "@/components/FloatingNav"
 import { BlogSection } from "@/components/BlogSection"
 import { BlogListSection } from "@/components/BlogListSection"
@@ -11,8 +12,10 @@ export const metadata: Metadata = {
 
 async function getBlogPosts() {
     try {
-        const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://graphics-garage.onrender.com"
+        console.log(baseUrl)
         const response = await fetch(`${baseUrl}/api/blog/posts?published=true`)
+        console.log(response)
 
         if (!response.ok) {
             throw new Error("Failed to fetch posts")

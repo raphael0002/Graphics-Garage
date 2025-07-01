@@ -63,8 +63,14 @@ export async function generateStaticParams() {
     `${baseUrl}/api/blog/posts?published=true`,
     { cache: "no-store" }
   );
-  const data = await response.json();
-  return data.posts.map((post: { slug: string }) => ({
+  let data: { posts?: { slug: string }[] } = {};
+  try {
+    data = await response.json();
+  } catch {
+    data = {};
+  }
+  const posts = Array.isArray(data.posts) ? data.posts : [];
+  return posts.map((post: { slug: string }) => ({
     slug: post.slug,
   }));
 }

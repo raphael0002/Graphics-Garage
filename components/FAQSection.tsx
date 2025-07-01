@@ -58,12 +58,12 @@ export const FAQSection = () => {
                                 onClick={() => toggleFAQ(index)}
                                 className="w-full px-6 md:px-8 py-6 md:py-8 text-left flex items-center justify-between transition-colors hover:bg-purple-primary/5"
                             >
-                                <span
+                                <div
                                     className={`text-base md:text-lg font-semibold transition-colors duration-300 ${openIndex === index ? "text-purple-primary" : "text-professional"
                                         }`}
                                 >
                                     {String(index + 1).padStart(2, "0")}. {faq.question}
-                                </span>
+                                </div>
                                 <motion.div
                                     animate={{ rotate: openIndex === index ? 180 : 0 }}
                                     transition={{ duration: 0.3 }}

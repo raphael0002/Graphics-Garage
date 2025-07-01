@@ -39,7 +39,7 @@ export const Footer = () => {
 
     return (
         <footer className="section-light border-t border-border py-12 md:py-4 transition-colors duration-300">
-            <div className="container mx-auto px-4 md:px-6 sm:mb-10">
+            <div className="container mx-auto px-4 md:px-6 sm:mb-10 pt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -51,8 +51,8 @@ export const Footer = () => {
                             <Image
                                 src={theme === "dark" ? "/logo-1.svg" : "/logo-light-2.svg"}
                                 alt="Graphics Garage Logo"
-                                width={320}
-                                height={320}
+                                width={250}
+                                height={250}
                                 className="mr-2 block"
                             />
                         </div>

@@ -1,3 +1,4 @@
+import { FloatingNav } from "@/components/FloatingNav";
 import { lazy, Suspense } from "react";
 // import { FloatingNav } from "@/components/FloatingNav";
 
@@ -18,7 +19,7 @@ const LoadingSpinner = () => (
 export default function Home() {
   return (
     <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-300">
-      {/* <FloatingNav /> */}
+      <FloatingNav />
       <Suspense fallback={<LoadingSpinner />}>
         <HeroSection />
       </Suspense>

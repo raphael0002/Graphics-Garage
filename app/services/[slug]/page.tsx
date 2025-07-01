@@ -1,5 +1,7 @@
 
 import { ContactSection } from "@/components/ContactSection"
+import { FloatingNav } from "@/components/FloatingNav"
+import { Footer } from "@/components/Footer"
 import { ServicePackagesSection } from "@/components/ServicePackageSection"
 import { ServiceProcessSection } from "@/components/ServiceProcessSection"
 import { ServiceSection } from "@/components/ServiceSection"
@@ -44,10 +46,12 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
     return (
         <main className="relative min-h-screen overflow-x-hidden mb-10 md:mb-0">
+            <FloatingNav />
             <ServiceSection service={service} />
             <ServicePackagesSection packages={service.packages} />
             <ServiceProcessSection process={service.process} />
             <ContactSection />
+            <Footer />
         </main>
     )
 }

@@ -43,53 +43,70 @@ export const TeamSection = () => {
                             key={member.id}
                             initial={{ opacity: 0, y: 30 }}
                             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className="card-professional rounded-2xl p-6 text-center hover:border-purple-primary transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
+                            transition={{
+                                duration: 0.4,
+                                delay: Math.min(index * 0.1, 0.3),
+                                ease: "easeOut"
+                            }}
+                            layout={false} // Prevent layout recalculation
+                            className="card-professional rounded-2xl p-8 text-center group relative overflow-hidden backdrop-blur-sm border-2 border-border hover:border-purple-primary/50"
                         >
-                            <div className="w-20 h-20 bg-gradient-to-br from-purple-primary/20 to-purple-dark/10 rounded-full flex items-center justify-center mx-auto mb-4 ring-2 ring-purple-primary/20 group-hover:ring-purple-primary/40 transition-all duration-300">
-                                <span className="text-2xl font-bold text-purple-primary">{member.avatar}</span>
-                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-b from-purple-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                            <h3 className="text-xl font-bold text-professional mb-1">{member.name}</h3>
-                            <p className="text-purple-primary font-medium mb-3">{member.position}</p>
-                            <p className="text-sm text-muted-professional leading-relaxed mb-4">{member.bio}</p>
+                            <div className="relative z-10">
+                                <div className="w-24 h-24 bg-gradient-to-br from-purple-primary to-purple-dark rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl ring-4 ring-purple-primary/20 group-hover:ring-purple-primary/30 transition-all duration-300 transform group-hover:rotate-6">
+                                    <span className="text-3xl font-bold text-white">{member.avatar}</span>
+                                </div>
 
-                            <div className="flex flex-wrap gap-1 mb-4">
-                                {member.skills.map((skill) => (
-                                    <span
-                                        key={skill}
-                                        className="px-2 py-1 bg-purple-primary/10 text-purple-primary text-xs rounded-full border border-purple-primary/20"
-                                    >
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
+                                <h3 className="text-2xl font-bold text-professional mb-2 group-hover:text-purple-primary transition-colors duration-300">
+                                    {member.name}
+                                </h3>
+                                <p className="text-purple-primary font-medium mb-4">{member.position}</p>
+                                <p className="text-sm text-muted-professional leading-relaxed mb-6">{member.bio}</p>
 
-                            <div className="flex justify-center space-x-3">
-                                {member.social.linkedin && (
-                                    <a
-                                        href={member.social.linkedin}
-                                        className="w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center hover:bg-purple-primary/20 transition-colors duration-300"
-                                    >
-                                        <Linkedin className="w-4 h-4 text-purple-primary" />
-                                    </a>
-                                )}
-                                {member.social.twitter && (
-                                    <a
-                                        href={member.social.twitter}
-                                        className="w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center hover:bg-purple-primary/20 transition-colors duration-300"
-                                    >
-                                        <Twitter className="w-4 h-4 text-purple-primary" />
-                                    </a>
-                                )}
-                                {member.social.github && (
-                                    <a
-                                        href={member.social.github}
-                                        className="w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center hover:bg-purple-primary/20 transition-colors duration-300"
-                                    >
-                                        <Github className="w-4 h-4 text-purple-primary" />
-                                    </a>
-                                )}
+                                <div className="flex flex-wrap gap-2 justify-center mb-6">
+                                    {member.skills.map((skill) => (
+                                        <span
+                                            key={skill}
+                                            className="px-3 py-1.5 bg-purple-primary/10 text-purple-primary text-xs font-medium rounded-xl border border-purple-primary/20 hover:bg-purple-primary/20 transition-colors duration-300"
+                                        >
+                                            {skill}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="flex justify-center space-x-4">
+                                    {member.social.linkedin && (
+                                        <a
+                                            href={member.social.linkedin}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-10 h-10 bg-card rounded-xl flex items-center justify-center hover:bg-purple-primary hover:text-white transition-all duration-300 group/icon"
+                                        >
+                                            <Linkedin className="w-5 h-5 text-purple-primary group-hover/icon:text-white" />
+                                        </a>
+                                    )}
+                                    {member.social.twitter && (
+                                        <a
+                                            href={member.social.twitter}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-10 h-10 bg-card rounded-xl flex items-center justify-center hover:bg-purple-primary hover:text-white transition-all duration-300 group/icon"
+                                        >
+                                            <Twitter className="w-5 h-5 text-purple-primary group-hover/icon:text-white" />
+                                        </a>
+                                    )}
+                                    {member.social.github && (
+                                        <a
+                                            href={member.social.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-10 h-10 bg-card rounded-xl flex items-center justify-center hover:bg-purple-primary hover:text-white transition-all duration-300 group/icon"
+                                        >
+                                            <Github className="w-5 h-5 text-purple-primary group-hover/icon:text-white" />
+                                        </a>
+                                    )}
+                                </div>
                             </div>
                         </motion.div>
                     ))}

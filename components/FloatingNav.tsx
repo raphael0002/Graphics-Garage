@@ -81,29 +81,31 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                 className,
             )}
         >
-            <div className="flex items-center justify-end relative z-10">
+            <div className="flex items-center justify-end relative z-10 w-full">
                 {/* Logo */}
-                <div className="items-center mr-4 absolute left-0">
+                <Link href="/" className="flex items-center absolute left-4">
                     {/* Desktop Logo */}
                     <Image
                         src={theme === "dark" ? "/logo-1.svg" : "/logo-light-2.svg"}
                         alt="Logo"
-                        width={100}
-                        height={200}
-                        className="mr-2 hidden md:block"
+                        width={150}
+                        height={70}
+                        className="hidden md:block h-12 w-auto"
+                        priority
                     />
                     {/* Mobile Logo */}
                     <Image
                         src={theme === "dark" ? "/logo-2.svg" : "/logo-light-1.svg"}
                         alt="Logo"
-                        width={30}
-                        height={200}
-                        className="mr-2 hidden md:hidden sm:block"
+                        width={32}
+                        height={32}
+                        className="hidden sm:block md:hidden h-8 w-auto"
+                        priority
                     />
-                </div>
+                </Link>
 
                 {/* Navigation Items */}
-                <div className="flex justify-end items-center w-full md:w-fit gap-8">
+                <div className="flex items-center gap-8">
                     <div className="flex items-center justify-center w-full space-x-1">
                         {navItems.map((navItem, idx) => (
                             <Link
@@ -123,7 +125,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                                     "text-sm font-medium",
                                 )}
                             >
-                                <navItem.icon className="md:hidden w-5 h-5" />
+                                <navItem.icon className="md:hidden w-6 h-6" />
                                 {isActive(navItem.link) && (
                                     <motion.div
                                         layoutId="activeSection"
@@ -132,7 +134,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
                                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                     />
                                 )}
-                                <span className="hidden md:inline relative z-10">{navItem.name}</span>
+                                <div className="hidden md:inline relative z-10">{navItem.name}</div>
                             </Link>
                         ))}
                     </div>

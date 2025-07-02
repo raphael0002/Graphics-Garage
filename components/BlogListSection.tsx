@@ -250,8 +250,30 @@ export const BlogListSection = ({
   return (
     <section className="py-12 bg-background transition-colors duration-300">
       <div className="container mx-auto px-4 max-w-7xl">
+        {/* Header Section */}
+        {/* <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 20 }}
+          animate={
+            isInView
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: 20 }
+          }
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Our Blog
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Discover insights, tutorials, and stories from
+            our community
+          </p>
+        </motion.div> */}
+
         {/* Filters Section */}
         <motion.div
+          ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={
             isInView

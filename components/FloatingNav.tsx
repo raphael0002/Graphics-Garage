@@ -127,7 +127,7 @@ export const FloatingNav = ({
           }}
           className={cn(
             "fixed top-4 left-1/2 -translate-x-1/2 z-50",
-            "w-[95vw] sm:w-[92vw] md:w-[90vw] lg:w-[88vw] xl:w-[85vw] 2xl:w-[80vw]",
+            "w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8",
             "max-w-[90vw] mx-auto",
             "bg-background/80 backdrop-blur-xl",
             "border border-border/40",

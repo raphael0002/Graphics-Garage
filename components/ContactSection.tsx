@@ -98,7 +98,7 @@ export const ContactSection = () => {
       className="py-16 md:py-20 section-light transition-colors duration-300"
     >
       {/* Contact Container - Medium Layout (87vw) */}
-      <div className="w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[87vw] lg:max-w-[85vw] xl:max-w-[82vw] 2xl:max-w-[78vw] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-start">
           <motion.div
             ref={ref}

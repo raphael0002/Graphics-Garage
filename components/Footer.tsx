@@ -67,8 +67,8 @@ export const Footer = () => {
                     : "/logo-light-2.svg"
                 }
                 alt="Graphics Garage Logo"
-                width={200}
-                height={80}
+                width={250}
+                height={130}
                 className="h-10 sm:h-12 w-auto"
               />
             </div>

@@ -250,27 +250,6 @@ export const BlogListSection = ({
   return (
     <section className="py-12 bg-background transition-colors duration-300">
       <div className="container mx-auto px-4 max-w-7xl">
-        {/* Header Section */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={
-            isInView
-              ? { opacity: 1, y: 0 }
-              : { opacity: 0, y: 20 }
-          }
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Our Blog
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover insights, tutorials, and stories from
-            our community
-          </p>
-        </motion.div>
-
         {/* Filters Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -428,7 +407,7 @@ export const BlogListSection = ({
                     delay: index * 0.1,
                   }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 border-border hover:border-primary/50 group">
+                  <Card className="h-full p-1 hover:shadow-lg transition-all duration-300  group bg-white dark:bg-purple-dark/30 border border-gray-200 dark:border-purple-dark/50 hover:border-purple-primary dark:hover:border-purple-primary backdrop-blur-sm">
                     <a
                       href={`/blog/${post.slug}`}
                       className="block h-full"

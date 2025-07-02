@@ -28,7 +28,7 @@ export const HeroSection = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300 pt-0 md:pt-8 lg:pt-0"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">

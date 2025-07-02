@@ -250,7 +250,7 @@ export const FloatingNav = ({
           >
             <div className="flex items-center justify-between py-3 relative z-10">
               {/* Mobile Navigation Items - Icons Only */}
-              <div className="flex items-center justify-between sm:justify-between space-x-1  w-full">
+              <div className="flex items-center justify-center sm:justify-between space-x-1  w-full">
                 <div className="flex items-center flex-shrink-0">
                   <Link
                     href="/"

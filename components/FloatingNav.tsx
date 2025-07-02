@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   Home,
@@ -34,11 +34,29 @@ export const FloatingNav = ({
 }) => {
   const [activeSection, setActiveSection] =
     useState("home");
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { setTheme, theme } = useTheme();
   const pathname = usePathname();
 
+  // Handle scroll direction for hide/show navbar
   useEffect(() => {
     const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Hide navbar when scrolling down, show when scrolling up
+      if (
+        currentScrollY > lastScrollY &&
+        currentScrollY > 100
+      ) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+
+      // Handle active section detection
       const sections = [
         "home",
         "services",
@@ -66,9 +84,10 @@ export const FloatingNav = ({
     window.addEventListener("scroll", handleScroll, {
       passive: true,
     });
+
     return () =>
       window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId.startsWith("#")) {
@@ -93,111 +112,140 @@ export const FloatingNav = ({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className={cn(
-        "fixed inset-x-0 mx-auto z-50 px-4 py-3 md:px-6 md:py-4",
-        "bg-background/20 backdrop-blur-2xl",
-        "border border-border/30",
-        "shadow-2xl shadow-black/10 dark:shadow-black/30",
-        "ring-1 ring-border/20",
-        "rounded-2xl transition-all duration-300",
-        "md:top-4 max-w-fit",
-        "bottom-8 max-w-[95vw] md:max-w-[85vw] md:bottom-auto",
-        "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none",
-        className
-      )}
-    >
-      <div className="flex items-center justify-end lg:justify-evenly relative z-10 w-full">
-        {/* Logo */}
-        <div className="flex items-center absolute left-4">
-          <Link href="/">
-            {/* Desktop Logo */}
-            <Image
-              src={
-                theme === "dark"
-                  ? "/logo-1.svg"
-                  : "/logo-light-2.svg"
-              }
-              alt="Logo"
-              width={150}
-              height={70}
-              className="hidden md:block h-12 w-auto"
-              priority
-            />
-            {/* Mobile Logo */}
-            <Image
-              src={
-                theme === "dark"
-                  ? "/logo-2.svg"
-                  : "/logo-light-1.svg"
-              }
-              alt="Logo"
-              width={32}
-              height={32}
-              className="hidden sm:block md:hidden h-8 w-auto"
-              priority
-            />
-          </Link>
-        </div>
-
-        {/* Navigation Items */}
-        <div className="flex items-center gap-4 lg:w-full">
-          <div className="flex items-center justify-center w-full space-x-0.5 sm:space-x-1 ">
-            {navItems.map((navItem, idx) => (
-              <Link
-                key={`link-${idx}`}
-                href={navItem.link}
-                onClick={(e) => {
-                  if (navItem.link.startsWith("#")) {
-                    e.preventDefault();
-                    scrollToSection(navItem.link);
+    <AnimatePresence mode="wait">
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -100 }}
+          transition={{
+            duration: 0.3,
+            ease: [0.4, 0, 0.2, 1],
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+          className={cn(
+            "fixed top-4 left-1/2 -translate-x-1/2 z-50",
+            "w-[95vw] sm:w-[92vw] md:w-[90vw] lg:w-[88vw] xl:w-[85vw] 2xl:w-[80vw]",
+            "max-w-[90vw] mx-auto",
+            "bg-background/80 backdrop-blur-xl",
+            "border border-border/40",
+            "shadow-2xl shadow-black/10 dark:shadow-black/30",
+            "ring-1 ring-border/20",
+            "rounded-2xl transition-all duration-300",
+            "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none",
+            className
+          )}
+        >
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 relative z-10">
+            {/* Logo Section */}
+            <div className="flex items-center flex-shrink-0">
+              <Link href="/" className="flex items-center">
+                {/* Desktop Logo */}
+                <Image
+                  src={
+                    theme === "dark"
+                      ? "/logo-1.svg"
+                      : "/logo-light-2.svg"
                   }
-                }}
-                className={cn(
-                  "relative flex items-center justify-center px-4 py-2 rounded-xl transition-all duration-300",
-                  "text-muted-foreground hover:text-foreground",
-                  "hover:bg-background/30 backdrop-blur-sm",
-                  isActive(navItem.link) &&
-                    "text-white drop-shadow-sm",
-                  "text-sm font-medium"
-                )}
-              >
-                <navItem.icon className="lg:hidden w-5 h-5 sm:w-6 sm:h-6" />
-                {isActive(navItem.link) && (
-                  <motion.div
-                    layoutId="activeSection"
-                    className="absolute inset-0 bg-purple-primary/90 backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-primary/30 -z-10"
-                    initial={false}
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  />
-                )}
-                <div className="hidden lg:inline relative z-10">
-                  {navItem.name}
-                </div>
+                  alt="Logo"
+                  width={150}
+                  height={70}
+                  className="hidden md:block h-8 lg:h-10 xl:h-12 w-auto"
+                  priority
+                />
+                {/* Mobile Logo */}
+                <Image
+                  src={
+                    theme === "dark"
+                      ? "/logo-2.svg"
+                      : "/logo-light-1.svg"
+                  }
+                  alt="Logo"
+                  width={32}
+                  height={32}
+                  className="block md:hidden h-7 sm:h-8 w-auto"
+                  priority
+                />
               </Link>
-            ))}
+            </div>
+
+            {/* Navigation Items - Center */}
+            <div className="flex items-center justify-center flex-1 mx-4 sm:mx-6 lg:mx-8">
+              <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
+                {navItems.map((navItem, idx) => (
+                  <Link
+                    key={`link-${idx}`}
+                    href={navItem.link}
+                    onClick={(e) => {
+                      if (navItem.link.startsWith("#")) {
+                        e.preventDefault();
+                        scrollToSection(navItem.link);
+                      }
+                    }}
+                    className={cn(
+                      "relative flex items-center justify-center",
+                      "px-2 py-2 sm:px-3 sm:py-2 lg:px-4 lg:py-2.5",
+                      "rounded-xl transition-all duration-300",
+                      "text-muted-foreground hover:text-foreground",
+                      "hover:bg-background/40 backdrop-blur-sm",
+                      "text-xs sm:text-sm font-medium",
+                      "min-w-[40px] sm:min-w-[44px] lg:min-w-auto",
+                      isActive(navItem.link) &&
+                        "text-white drop-shadow-sm"
+                    )}
+                  >
+                    {/* Mobile: Show only icons */}
+                    <navItem.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" />
+
+                    {/* Desktop: Show text */}
+                    <span className="hidden lg:inline relative z-10">
+                      {navItem.name}
+                    </span>
+
+                    {/* Active indicator */}
+                    {isActive(navItem.link) && (
+                      <motion.div
+                        layoutId="activeSection"
+                        className="absolute inset-0 bg-purple-500/90 backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-500/30 -z-10"
+                        initial={false}
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Theme Toggle - Right */}
+            <div className="flex items-center flex-shrink-0">
+              <button
+                onClick={toggleTheme}
+                className={cn(
+                  "w-8 h-8 sm:w-10 sm:h-10 rounded-xl",
+                  "bg-background/40 backdrop-blur-sm",
+                  "flex items-center justify-center",
+                  "hover:bg-background/60 transition-all duration-200",
+                  "border border-border/30",
+                  "shadow-lg ring-1 ring-border/10"
+                )}
+                aria-label="Toggle theme"
+              >
+                <Sun className="h-4 w-4 sm:h-5 sm:w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground" />
+                <Moon className="absolute h-4 w-4 sm:h-5 sm:w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground" />
+              </button>
+            </div>
           </div>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="w-8 h-8 hidden rounded-xl bg-background/20 backdrop-blur-sm md:flex items-center justify-center hover:bg-background/30 transition-all duration-200 border border-border/20 shadow-lg ring-1 ring-border/10"
-          >
-            <Sun className="h w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground drop-shadow-sm" />
-            <Moon className="absolute h-6 w-6 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground drop-shadow-sm" />
-          </button>
-        </div>
-      </div>
-
-      {/* Additional glass effect overlay */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-background/5 to-transparent pointer-events-none" />
-    </motion.div>
+          {/* Glass effect overlay */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-background/5 to-transparent pointer-events-none" />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

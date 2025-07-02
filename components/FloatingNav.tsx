@@ -112,140 +112,201 @@ export const FloatingNav = ({
   };
 
   return (
-    <AnimatePresence mode="wait">
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -100 }}
-          transition={{
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1],
-            type: "spring",
-            stiffness: 300,
-            damping: 30,
-          }}
-          className={cn(
-            "fixed top-4 left-1/2 -translate-x-1/2 z-50",
-            "w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8",
-            "max-w-[90vw] mx-auto",
-            "bg-background/80 backdrop-blur-xl",
-            "border border-border/40",
-            "shadow-2xl shadow-black/10 dark:shadow-black/30",
-            "ring-1 ring-border/20",
-            "rounded-2xl transition-all duration-300",
-            "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none",
-            className
-          )}
-        >
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 relative z-10">
-            {/* Logo Section */}
-            <div className="flex items-center flex-shrink-0">
-              <Link href="/" className="flex items-center">
-                {/* Desktop Logo */}
-                <Image
-                  src={
-                    theme === "dark"
-                      ? "/logo-1.svg"
-                      : "/logo-light-2.svg"
-                  }
-                  alt="Logo"
-                  width={150}
-                  height={70}
-                  className="hidden md:block h-8 lg:h-10 xl:h-12 w-auto"
-                  priority
-                />
-                {/* Mobile Logo */}
-                <Image
-                  src={
-                    theme === "dark"
-                      ? "/logo-2.svg"
-                      : "/logo-light-1.svg"
-                  }
-                  alt="Logo"
-                  width={32}
-                  height={32}
-                  className="block md:hidden h-7 sm:h-8 w-auto"
-                  priority
-                />
-              </Link>
-            </div>
+    <>
+      {/* Desktop Navbar - Top (Medium screens and above) */}
+      <AnimatePresence mode="wait">
+        {isVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -100 }}
+            transition={{
+              duration: 0.4,
+              ease: [0.4, 0, 0.2, 1],
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+            }}
+            className={cn(
+              "fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden md:block",
+              "w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw]",
+              "bg-background/40 backdrop-blur-xl",
+              "border border-border/40",
+              "shadow-2xl shadow-black/10 dark:shadow-black/30",
+              "ring-1 ring-border/20",
+              "rounded-2xl transition-all duration-300",
+              "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none",
+              className
+            )}
+          >
+            <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 relative z-10">
+              {/* Logo Section - Only on medium screens and above */}
+              <div className="flex items-center flex-shrink-0">
+                <Link
+                  href="/"
+                  className="flex items-center"
+                >
+                  <Image
+                    src={
+                      theme === "dark"
+                        ? "/logo-1.svg"
+                        : "/logo-light-2.svg"
+                    }
+                    alt="Logo"
+                    width={150}
+                    height={70}
+                    className="h-8 lg:h-10 xl:h-12 w-auto"
+                    priority
+                  />
+                </Link>
+              </div>
 
-            {/* Navigation Items - Center */}
-            <div className="flex items-center justify-center flex-1 mx-4 sm:mx-6 lg:mx-8">
-              <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3">
-                {navItems.map((navItem, idx) => (
-                  <Link
-                    key={`link-${idx}`}
-                    href={navItem.link}
-                    onClick={(e) => {
-                      if (navItem.link.startsWith("#")) {
-                        e.preventDefault();
-                        scrollToSection(navItem.link);
-                      }
-                    }}
-                    className={cn(
-                      "relative flex items-center justify-center",
-                      "px-2 py-2 sm:px-3 sm:py-2 lg:px-4 lg:py-2.5",
-                      "rounded-xl transition-all duration-300",
-                      "text-muted-foreground hover:text-foreground",
-                      "hover:bg-background/40 backdrop-blur-sm",
-                      "text-xs sm:text-sm font-medium",
-                      "min-w-[40px] sm:min-w-[44px] lg:min-w-auto",
-                      isActive(navItem.link) &&
-                        "text-white drop-shadow-sm"
-                    )}
-                  >
-                    {/* Mobile: Show only icons */}
-                    <navItem.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" />
+              {/* Navigation Items - Center */}
+              <div className="flex items-center justify-center flex-1 mx-6 lg:mx-8">
+                <div className="flex items-center space-x-2 lg:space-x-3">
+                  {navItems.map((navItem, idx) => (
+                    <Link
+                      key={`link-${idx}`}
+                      href={navItem.link}
+                      onClick={(e) => {
+                        if (navItem.link.startsWith("#")) {
+                          e.preventDefault();
+                          scrollToSection(navItem.link);
+                        }
+                      }}
+                      className={cn(
+                        "relative flex items-center justify-center",
+                        "px-4 py-2 lg:px-6 lg:py-2 ",
+                        "rounded-xl transition-all duration-300",
+                        "text-muted-foreground hover:text-foreground",
+                        "hover:bg-background/40",
+                        "text-sm lg:text-base font-medium group",
+                        isActive(navItem.link) && [
+                          "text-white bg-purple-primary/90 shadow-lg",
+                          "ring-1 ring-purple-primary/30",
+                          "hover:bg-purple-primary hover:text-white",
+                        ]
+                      )}
+                    >
+                      {/* Large screens: Text only */}
+                      <div className="relative z-10">
+                        {navItem.name}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-                    {/* Desktop: Show text */}
-                    <span className="hidden lg:inline relative z-10">
-                      {navItem.name}
-                    </span>
-
-                    {/* Active indicator */}
-                    {isActive(navItem.link) && (
-                      <motion.div
-                        layoutId="activeSection"
-                        className="absolute inset-0 bg-purple-500/90 backdrop-blur-sm rounded-xl shadow-lg ring-1 ring-purple-500/30 -z-10"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          stiffness: 380,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                  </Link>
-                ))}
+              {/* Theme Toggle - Right */}
+              <div className="flex items-center flex-shrink-0">
+                <button
+                  onClick={toggleTheme}
+                  className={cn(
+                    "w-10 h-10 rounded-xl",
+                    "bg-background/40 backdrop-blur-sm",
+                    "flex items-center justify-center",
+                    "hover:bg-background/60 transition-all duration-200",
+                    "border border-border/30",
+                    "shadow-lg ring-1 ring-border/10"
+                  )}
+                  aria-label="Toggle theme"
+                >
+                  <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground" />
+                  <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground" />
+                </button>
               </div>
             </div>
 
-            {/* Theme Toggle - Right */}
-            <div className="flex items-center flex-shrink-0">
-              <button
-                onClick={toggleTheme}
-                className={cn(
-                  "w-8 h-8 sm:w-10 sm:h-10 rounded-xl",
-                  "bg-background/40 backdrop-blur-sm",
-                  "flex items-center justify-center",
-                  "hover:bg-background/60 transition-all duration-200",
-                  "border border-border/30",
-                  "shadow-lg ring-1 ring-border/10"
-                )}
-                aria-label="Toggle theme"
-              >
-                <Sun className="h-4 w-4 sm:h-5 sm:w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-muted-foreground" />
-                <Moon className="absolute h-4 w-4 sm:h-5 sm:w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-muted-foreground" />
-              </button>
-            </div>
-          </div>
+            {/* Glass effect overlay */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-background/5 to-transparent pointer-events-none" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Glass effect overlay */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-background/5 to-transparent pointer-events-none" />
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* Mobile Navbar - Bottom (Small screens only) */}
+      <AnimatePresence mode="wait">
+        {isVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            transition={{
+              duration: 0.4,
+              ease: [0.4, 0, 0.2, 1],
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+            }}
+            className={cn(
+              "fixed bottom-4 left-1/2 -translate-x-1/2 z-50 block md:hidden",
+              "w-full max-w-[95vw] mx-auto px-4",
+              "bg-background/40 backdrop-blur-xl",
+              "border border-border/40",
+              "shadow-2xl shadow-black/20 dark:shadow-black/40",
+              "ring-1 ring-border/20",
+              "rounded-2xl transition-all duration-300",
+              "before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-r before:from-background/10 before:to-transparent before:pointer-events-none"
+            )}
+          >
+            <div className="flex items-center justify-between py-3 relative z-10">
+              {/* Mobile Navigation Items - Icons Only */}
+              <div className="flex items-center justify-between sm:justify-between space-x-1  w-full">
+                <div className="flex items-center flex-shrink-0">
+                  <Link
+                    href="/"
+                    className="flex items-center"
+                  >
+                    <Image
+                      src={
+                        theme === "dark"
+                          ? "/logo-2.svg"
+                          : "/logo-light-1.svg"
+                      }
+                      alt="Logo"
+                      width={150}
+                      height={70}
+                      className="h-8 hidden sm:block lg:h-10 xl:h-12 w-auto"
+                      priority
+                    />
+                  </Link>
+                </div>
+                <div className="flex items-center space-x-1">
+                  {navItems.map((navItem, idx) => (
+                    <Link
+                      key={`mobile-link-${idx}`}
+                      href={navItem.link}
+                      onClick={(e) => {
+                        if (navItem.link.startsWith("#")) {
+                          e.preventDefault();
+                          scrollToSection(navItem.link);
+                        }
+                      }}
+                      className={cn(
+                        "relative flex items-center justify-center",
+                        "w-12 h-12 rounded-xl transition-all duration-300",
+                        "text-muted-foreground hover:text-foreground",
+                        "hover:bg-background/40",
+                        "active:scale-95",
+                        isActive(navItem.link) && [
+                          "text-white bg-purple-primary/90 shadow-lg",
+                          "ring-1 ring-purple-primary/30",
+                          "hover:bg-purple-primary hover:text-white",
+                        ]
+                      )}
+                    >
+                      {/* Small screens: Icons only */}
+                      <navItem.icon className="w-6 h-6" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Glass effect overlay */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-background/5 to-transparent pointer-events-none" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

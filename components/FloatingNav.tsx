@@ -129,8 +129,8 @@ export const FloatingNav = ({
             }}
             className={cn(
               "fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden md:block",
-              "w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw]",
-              "bg-background/40 backdrop-blur-xl",
+              "w-[min(90vw,80rem)] mx-auto",
+              "bg-background/80 backdrop-blur-xl",
               "border border-border/40",
               "shadow-2xl shadow-black/10 dark:shadow-black/30",
               "ring-1 ring-border/20",
@@ -139,7 +139,7 @@ export const FloatingNav = ({
               className
             )}
           >
-            <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 relative z-10">
+            <div className="flex items-center justify-between px-6 lg:px-8 py-4 relative z-10">
               {/* Logo Section - Only on medium screens and above */}
               <div className="flex items-center flex-shrink-0">
                 <Link
@@ -162,8 +162,8 @@ export const FloatingNav = ({
               </div>
 
               {/* Navigation Items - Center */}
-              <div className="flex items-center justify-center flex-1 mx-6 lg:mx-8">
-                <div className="flex items-center space-x-2 lg:space-x-3">
+              <div className="flex items-center justify-center flex-1 mx-8">
+                <div className="flex items-center space-x-3">
                   {navItems.map((navItem, idx) => (
                     <Link
                       key={`link-${idx}`}
@@ -176,10 +176,10 @@ export const FloatingNav = ({
                       }}
                       className={cn(
                         "relative flex items-center justify-center",
-                        "px-4 py-2 lg:px-6 lg:py-2 ",
+                        "px-4 py-2.5 lg:px-5 lg:py-3",
                         "rounded-xl transition-all duration-300",
                         "text-muted-foreground hover:text-foreground",
-                        "hover:bg-background/40",
+                        "hover:bg-background/40 backdrop-blur-sm",
                         "text-sm lg:text-base font-medium group",
                         isActive(navItem.link) && [
                           "text-white bg-purple-primary/90 shadow-lg",
@@ -189,9 +189,9 @@ export const FloatingNav = ({
                       )}
                     >
                       {/* Large screens: Text only */}
-                      <div className="relative z-10">
+                      <span className="relative z-10">
                         {navItem.name}
-                      </div>
+                      </span>
                     </Link>
                   ))}
                 </div>
@@ -239,8 +239,8 @@ export const FloatingNav = ({
             }}
             className={cn(
               "fixed bottom-4 left-1/2 -translate-x-1/2 z-50 block md:hidden",
-              "w-full max-w-[95vw] mx-auto px-4",
-              "bg-background/40 backdrop-blur-xl",
+              "w-[min(95vw,85vw)] mx-auto",
+              "bg-background/90 backdrop-blur-xl",
               "border border-border/40",
               "shadow-2xl shadow-black/20 dark:shadow-black/40",
               "ring-1 ring-border/20",
@@ -250,7 +250,7 @@ export const FloatingNav = ({
           >
             <div className="flex items-center justify-between py-3 relative z-10">
               {/* Mobile Navigation Items - Icons Only */}
-              <div className="flex items-center justify-center sm:justify-between space-x-1  w-full">
+              <div className="flex items-center justify-center sm:justify-between w-full px-4">
                 <div className="flex items-center flex-shrink-0">
                   <Link
                     href="/"
@@ -270,7 +270,7 @@ export const FloatingNav = ({
                     />
                   </Link>
                 </div>
-                <div className="flex items-center space-x-1">
+                <div className="flex flex-row items-center space-x-1 sm:space-x-2">
                   {navItems.map((navItem, idx) => (
                     <Link
                       key={`mobile-link-${idx}`}
@@ -285,7 +285,7 @@ export const FloatingNav = ({
                         "relative flex items-center justify-center",
                         "w-12 h-12 rounded-xl transition-all duration-300",
                         "text-muted-foreground hover:text-foreground",
-                        "hover:bg-background/40",
+                        "hover:bg-background/40 backdrop-blur-sm",
                         "active:scale-95",
                         isActive(navItem.link) && [
                           "text-white bg-purple-primary/90 shadow-lg",

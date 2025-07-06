@@ -25,8 +25,8 @@ export const FAQSection = () => {
       id="faq"
       className="py-16 md:py-20 section-light transition-colors duration-300"
     >
-      {/* FAQ Container - Wide Layout (90vw) - Same as Hero */}
-      <div className="w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8">
+      {/* FAQ Container - Wide Layout with consistent spacing */}
+      <div className="w-full max-w-[min(90vw,85rem)] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
@@ -62,7 +62,7 @@ export const FAQSection = () => {
           </p>
         </motion.div>
 
-        <div className="space-y-3 sm:space-y-4 max-w-7xl mx-auto ">
+        <div className="space-y-3 sm:space-y-4 max-w-7xl mx-auto">
           {faqData.map((faq, index) => (
             <motion.div
               key={faq.id}

@@ -26,8 +26,8 @@ export const ServicesSection = () => {
       id="services"
       className="py-12 md:py-20 section-light transition-colors duration-300"
     >
-      {/* Services Container - Medium Layout (87vw) */}
-      <div className="w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Services Container - Medium Layout with consistent spacing */}
+      <div className="w-full max-w-[min(90vw,85rem)] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}

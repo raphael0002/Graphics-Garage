@@ -36,7 +36,12 @@ export const teamData: TeamMember[] = [
     position: "Lead Developer",
     bio: "Michael brings 10+ years of full-stack development expertise, specializing in modern web technologies and scalable solutions.",
     avatar: "MC",
-    skills: ["React", "Node.js", "TypeScript", "System Architecture"],
+    skills: [
+      "React",
+      "Node.js",
+      "TypeScript",
+      "System Architecture",
+    ],
     social: {
       linkedin: "#",
       github: "#",
@@ -65,7 +70,29 @@ export const teamData: TeamMember[] = [
     position: "Digital Marketing Strategist",
     bio: "David develops data-driven marketing strategies that help brands grow their online presence and achieve measurable results.",
     avatar: "DR",
-    skills: ["SEO", "Social Media", "Content Strategy", "Analytics"],
+    skills: [
+      "SEO",
+      "Social Media",
+      "Content Strategy",
+      "Analytics",
+    ],
+    social: {
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "david-rodriguezss",
+    name: "David Rodriguez",
+    position: "Digital Marketing Strategist",
+    bio: "David develops data-driven marketing strategies that help brands grow their online presence and achieve measurable results.",
+    avatar: "DR",
+    skills: [
+      "SEO",
+      "Social Media",
+      "Content Strategy",
+      "Analytics",
+    ],
     social: {
       linkedin: "#",
       twitter: "#",

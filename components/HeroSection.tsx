@@ -28,7 +28,7 @@ export const HeroSection = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300 pt-0 md:pt-8 lg:pt-0"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300 pt-0 md:pt-20 lg:pt-0"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -39,8 +39,8 @@ export const HeroSection = () => {
         />
       </div>
 
-      {/* Hero Container - Wide Layout (90vw) */}
-      <div className="w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Hero Container - Wide Layout with consistent spacing */}
+      <div className="w-full max-w-[min(90vw,85rem)] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 xl:gap-16 items-center justify-center mt-16 sm:mt-20">
           <motion.div
             initial={{ opacity: 0, y: 50 }}

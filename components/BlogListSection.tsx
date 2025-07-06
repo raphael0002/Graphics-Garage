@@ -440,6 +440,8 @@ export const BlogListSection = ({
                             post.featuredImage ||
                             "/placeholder.svg?height=200&width=400"
                           }
+                          width={400}
+                          height={200}
                           alt={post.title}
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                         />

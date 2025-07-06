@@ -15,7 +15,7 @@ export const AboutHeroSection = () => {
         />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <div className="w-full max-w-[min(90vw,85rem)] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mt-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -56,7 +56,7 @@ export const AboutHeroSection = () => {
 
           {/* Mission Cards */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}

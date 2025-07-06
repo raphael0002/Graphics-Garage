@@ -49,7 +49,8 @@ export const CompanyStatsSection = () => {
 
   return (
     <section className="py-16 md:py-20 section-light transition-colors duration-300">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="w-full max-w-[min(90vw,85rem)] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/*container mx-auto px-4 md:px-6 */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}

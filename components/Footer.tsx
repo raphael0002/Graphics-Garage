@@ -50,8 +50,8 @@ export const Footer = () => {
 
   return (
     <footer className="section-light border-t border-border py-12 md:py-16 transition-colors duration-300">
-      {/* Footer Container - Wide Layout (90vw) - Same as Navbar */}
-      <div className="w-full max-w-[95vw] sm:max-w-[92vw] md:max-w-[90vw] lg:max-w-[88vw] xl:max-w-[85vw] 2xl:max-w-[80vw] mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Footer Container - Wide Layout with consistent spacing */}
+      <div className="w-full max-w-[min(90vw,85rem)] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 mb-8 md:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -67,9 +67,9 @@ export const Footer = () => {
                     : "/logo-light-2.svg"
                 }
                 alt="Graphics Garage Logo"
-                width={250}
-                height={130}
-                className="h-10 sm:h-12 w-auto"
+                width={200}
+                height={80}
+                className="h-10 sm:h-24 w-auto"
               />
             </div>
 

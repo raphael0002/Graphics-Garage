@@ -3,12 +3,36 @@ import { lazy, Suspense } from "react";
 // import { FloatingNav } from "@/components/FloatingNav";
 
 // Lazy load components for better performance
-const HeroSection = lazy(() => import("@/components/HeroSection").then(module => ({ default: module.HeroSection })));
-const ServicesSection = lazy(() => import("@/components/ServicesSection").then(module => ({ default: module.ServicesSection })));
-const TestimonialsSection = lazy(() => import("@/components/TestimonialSection").then(module => ({ default: module.TestimonialsSection })));
-const FAQSection = lazy(() => import("@/components/FAQSection").then(module => ({ default: module.FAQSection })));
-const ContactSection = lazy(() => import("@/components/ContactSection").then(module => ({ default: module.ContactSection })));
-const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
+const HeroSection = lazy(() =>
+  import("@/components/HeroSection").then((module) => ({
+    default: module.HeroSection,
+  }))
+);
+const ServicesSection = lazy(() =>
+  import("@/components/ServicesSection").then((module) => ({
+    default: module.ServicesSection,
+  }))
+);
+const TestimonialsSection = lazy(() =>
+  import("@/components/TestimonialSection").then(
+    (module) => ({ default: module.TestimonialsSection })
+  )
+);
+const FAQSection = lazy(() =>
+  import("@/components/FAQSection").then((module) => ({
+    default: module.FAQSection,
+  }))
+);
+const ContactSection = lazy(() =>
+  import("@/components/ContactSection").then((module) => ({
+    default: module.ContactSection,
+  }))
+);
+const Footer = lazy(() =>
+  import("@/components/Footer").then((module) => ({
+    default: module.Footer,
+  }))
+);
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-[200px]">

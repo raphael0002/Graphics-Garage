@@ -59,29 +59,17 @@ export async function generateStaticParams() {
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
     "https://graphics-garage.vercel.app";
-  try {
-    const response = await fetch(
-      `${baseUrl}/api/blog/posts?published=true`,
-      { cache: "no-store" }
-    );
-    if (!response.ok) {
-      console.error(
-        "Failed to fetch blog posts:",
-        response.statusText
-      );
-      return [];
-    }
-    const data = await response.json();
-    console.log("API Response:", data); // Debug log
-    return Array.isArray(data.posts)
-      ? data.posts.map((post: { slug: string }) => ({
-          slug: post.slug,
-        }))
-      : [];
-  } catch (error) {
-    console.error("Error in generateStaticParams:", error);
-    return [];
-  }
+  const response = await fetch(
+    `${baseUrl}/api/blog/posts?published=true`,
+
+    { cache: "no-store" }
+  );
+
+  const data = await response.json();
+
+  return data.posts.map((post: { slug: string }) => ({
+    slug: post.slug,
+  }));
 }
 
 export default async function BlogPostPage({

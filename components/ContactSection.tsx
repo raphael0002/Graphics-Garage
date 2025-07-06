@@ -148,7 +148,7 @@ export const ContactSection = () => {
                     Email Us
                   </p>
                   <p className="text-muted-professional text-sm sm:text-base md:text-lg">
-                    hello@graphicsgarage.com
+                    connectgraphicsgarage@gmail.com
                   </p>
                 </div>
               </motion.div>
@@ -166,7 +166,7 @@ export const ContactSection = () => {
                     Call Us
                   </p>
                   <p className="text-muted-professional text-sm sm:text-base md:text-lg">
-                    +1 (555) 000-0000
+                    +977-9810046115
                   </p>
                 </div>
               </motion.div>
@@ -184,7 +184,7 @@ export const ContactSection = () => {
                     Visit Us
                   </p>
                   <p className="text-muted-professional text-sm sm:text-base md:text-lg">
-                    123 Design Street, Creative City
+                    Bouddha-6,Kathmandu, Nepal
                   </p>
                 </div>
               </motion.div>

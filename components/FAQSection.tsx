@@ -2,9 +2,126 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { JSX, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { faqData } from "@/data/faq";
+// import { faqData } from "@/data/faq";
+
+export interface FAQ {
+  id: string;
+  question: string;
+  answer: JSX.Element;
+  category: string;
+}
+
+export const faqData: FAQ[] = [
+  {
+    id: "services-offered",
+    question: "What services does Graphics Garage offer?",
+    answer: (
+      <>
+        <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+          We offer a range of creative services including:
+        </p>
+        <ul className="list-disc pl-6">
+          <li>Branding & Visual Identity</li>
+          <li>Graphics Design</li>
+          <li>Social Media Design & Management</li>
+          <li>UI/UX Design</li>
+          <li>Web Design & Development</li>
+        </ul>
+      </>
+    ),
+    category: "Services",
+  },
+  {
+    id: "project-timeline",
+    question: "How can I get started with Graphics Garage?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        Simply reach out via our WhatsApp: 9810046115 or
+        send us an email at connectgraphicsgarage@gmail.com.
+        We’ll get back to you to discuss your project,
+        goals, and timelines.
+      </p>
+    ),
+    category: "Process",
+  },
+  {
+    id: "ongoing-support",
+    question:
+      "What makes Graphics Garage different from other design agencies?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        We treat every brand like our own. From strategy to
+        execution, we blend design with purpose to create
+        meaningful brand experiences.
+      </p>
+    ),
+    category: "Support",
+  },
+  {
+    id: "design-process",
+    question:
+      "Can I hire you for just one service (e.g., only a logo or only UI/UX)?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        Absolutely. Whether you need a complete brand
+        identity or just a specific service, we’re here to
+        help based on your needs.
+      </p>
+    ),
+    category: "Process",
+  },
+  {
+    id: "project-communication",
+    question: "Do you also manage social media accounts?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        Yes, we design content and can assist with account
+        management strategies to help grow your brand
+        online.
+      </p>
+    ),
+    category: "Communication",
+  },
+  {
+    id: "agency-difference",
+    question:
+      "Do you provide revisions during the project?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        Yes, we work closely with you throughout the process
+        and provide multiple rounds of revisions to ensure
+        your satisfaction.
+      </p>
+    ),
+    category: "About",
+  },
+  {
+    id: "additional-services",
+    question: "How much do your services cost?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        Our pricing varies by project size and complexity.
+        Contact us for a custom quote based on your specific
+        needs.
+      </p>
+    ),
+    category: "Services",
+  },
+  {
+    id: "international-clients",
+    question:
+      "Where are you based, and do you work with international clients?",
+    answer: (
+      <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
+        We’re based in Nepal but happily collaborate with
+        clients from around the world.
+      </p>
+    ),
+    category: "Location",
+  },
+];
 
 export const FAQSection = () => {
   const ref = useRef(null);
@@ -126,10 +243,8 @@ export const FAQSection = () => {
                 }}
                 className="overflow-hidden"
               >
-                <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 border-t border-border/30">
-                  <p className="text-muted-professional leading-relaxed pt-4 text-sm sm:text-base">
-                    {faq.answer}
-                  </p>
+                <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-10 border-t border-border/30">
+                  <div>{faq.answer}</div>
                 </div>
               </motion.div>
             </motion.div>

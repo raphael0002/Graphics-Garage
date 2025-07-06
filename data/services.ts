@@ -51,7 +51,7 @@ export const servicesData: Service[] = [
     packages: [
       {
         name: "Starter",
-        price: "$499",
+        price: "Rs. 1499",
         duration: "per month",
         features: [
           "2 Social Media Platforms",
@@ -63,7 +63,7 @@ export const servicesData: Service[] = [
       },
       {
         name: "Professional",
-        price: "$999",
+        price: "Rs. 2999",
         duration: "per month",
         popular: true,
         features: [
@@ -78,7 +78,7 @@ export const servicesData: Service[] = [
       },
       {
         name: "Enterprise",
-        price: "$1999",
+        price: "Rs. 4999",
         duration: "per month",
         features: [
           "All Social Media Platforms",

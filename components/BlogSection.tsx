@@ -9,7 +9,7 @@ export const BlogSection = () => {
   const isInView = useInView(ref, { once: true });
 
   return (
-    <section className="pt-32 pb-16 md:pb-20 section-light transition-colors duration-300 relative overflow-hidden">
+    <section className="pb-16 md:pb-20 section-light transition-colors duration-300 relative overflow-hidden pt-10 md:pt-24">
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div
           ref={ref}

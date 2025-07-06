@@ -28,7 +28,7 @@ export const ServiceSection = ({
 
   if (!service) {
     return (
-      <section className="min-h-screen flex items-center justify-center">
+      <section className="min-h-screen flex items-center justify-center pt-10 md:pt-24">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-professional mb-4">
             Service Not Found

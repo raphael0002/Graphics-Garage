@@ -28,7 +28,7 @@ export const HeroSection = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300 pt-0 md:pt-20 lg:pt-0"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden section-light transition-colors duration-300 pt-10 md:pt-24"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -138,7 +138,7 @@ export const HeroSection = () => {
             >
               <div className="text-center">
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-primary">
-                  200+
+                  30+
                 </div>
                 <div className="text-xs sm:text-sm text-muted-professional">
                   Projects Completed
@@ -146,7 +146,7 @@ export const HeroSection = () => {
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-primary">
-                  50+
+                  30+
                 </div>
                 <div className="text-xs sm:text-sm text-muted-professional">
                   Happy Clients
@@ -154,7 +154,7 @@ export const HeroSection = () => {
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-primary">
-                  5+
+                  2+
                 </div>
                 <div className="text-xs sm:text-sm text-muted-professional">
                   Years Experience
